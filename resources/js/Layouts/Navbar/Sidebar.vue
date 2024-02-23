@@ -23,11 +23,34 @@
                 <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['admin-ver usuarios'])">
                     <a  href="#navbar-admin" class="nav-link" aria-controls="navbar-admin" role="button">
                         <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="fa-solid fa-home text-secondary text-sm opacity-10"></i>
+                            <i class="fa-solid fa-unlock text-secondary text-sm opacity-10"></i>
                         </div>
                         <span class="nav-link-text ms-1">Admin</span>
                     </a>
                 </li>
+                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['clientes-ver clientes'])">
+                    <a href="#navbar-clients" class="nav-link" aria-controls="navbar-clientes" 
+                    role="button"
+                    :active="{'active' : $page.component.includes('Clients'), 'collapsed': !$page.component.includes('Clients')}">
+                        <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="fa-solid fa-users text-secondary text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Clientes</span>
+                    </a>
+                    <div class="collapse" id="navbar-clients"
+                        :class="{'show' : $page.component.includes('Clients')}">
+                        <ul class="nav ms-4">
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'clientes-ver clientes')"
+                                :class="{'active' : $page.component.includes('Clients/ListClients')}">
+                                <Link class="nav-link">
+                                    <span class="sidenav-normal">Lista de clientes</span>
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Divider -->
             </ul>
         </div>
         <!-- Divider -->
@@ -48,9 +71,6 @@
 </template>
 <script>
 import {Link} from "@inertiajs/inertia-vue3";
-const logout = () => {
-    router.post(route('logout'));
-};
 export default {
     name: "Sidebar",
     components: {
