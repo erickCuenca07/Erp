@@ -12,9 +12,7 @@ import Sidebar from './Navbar/Sidebar.vue';
 import { loadScript } from "vue-plugin-load-script";
 import TemplateManager from "../Shared/TemplateManager.vue";
 
-
-
-loadScript("/argon/js/argon-dashboard.min.js?v=2.0.2");
+loadScript("/assets/js/argon-dashboard.min.js?v=2.0.5");
 
 export default {
     name: "Layout",
