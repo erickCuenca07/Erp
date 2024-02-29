@@ -30,7 +30,8 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
             "Admin\\": "src/Hmb/Admin/",
-            "Clients\\": "src/Hmb/Clients/"
+            "Clients\\": "src/Hmb/Clients/",
+            "Products\\": "src/Hmb/Products/"
         }
     },
     "autoload-dev": {

@@ -19,7 +19,7 @@
                         </div>
                         <span class="nav-link-text ms-1">Panel</span>
                     </Link>
-                </li>     
+                </li>
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#navbar-admin" class="nav-link " aria-controls="navbar-admin" role="button">
                         <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
@@ -58,7 +58,24 @@
                             </li>
                         </ul>
                     </div>
-                </li>    
+                </li>
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#navbar-products" class="nav-link " aria-controls="navbar-products" role="button">
+                        <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                            <i class="ni ni-box-2 text-success text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Productos</span>
+                    </a>
+                    <div class="" id="navbar-products">
+                        <ul class="nav ms-4">
+                            <li class="nav-item">
+                                <Link class="nav-link" :href="route('products.index')">
+                                    <span class="sidenav-normal">Lista de productos</span>
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </div>
         <!-- Divider -->
@@ -80,9 +97,15 @@
 <script>
 import {Link} from "@inertiajs/inertia-vue3";
 import { loadScript } from "vue-plugin-load-script";
+import {router} from "@inertiajs/vue3";
 loadScript("/assets/js/argon-dashboard.min.js?v=2.0.5");
 export default {
     name: "Sidebar",
+    methods: {
+        router() {
+            return router
+        }
+    },
     components: {
         Link,
     },
