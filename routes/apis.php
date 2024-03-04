@@ -1,11 +1,12 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use Products\ListProducts\Domain\Model\ListProductsModel;
-use Products\ListProducts\Infrastructure\Entrypoint\Http\ListProductsController;
+use Api\DelSol\Infrastructure\Entrypoint\Http\ApiDelSolController;
+use Api\DelSol\Domain\Model\ApiDelSol;
+
 
 Route::group(
     [
-        'prefix' => 'hmb/products',
+        'prefix' => 'hmb/apis',
         'middleware' => ['auth']
     ],
     function (){
@@ -14,12 +15,12 @@ Route::group(
             'verified',
         ])->group(function (){
             Route::group([
-                'prefix' => 'listProducts',
+                'prefix' => 'delSol',
             ], function () {
                 Route::group([
-                    'middleware' => ['can:view,' .ListProductsModel ::class],
+                    'middleware' => ['can:view,' .ApiDelSol ::class],
                 ], function () {
-                    Route::get('/', [ListProductsController::class, 'index'])->name('products.listProducts.index');
+                    Route::get('/', [ApiDelSolController::class, 'index'])->name('apis.delSol.index');
 
                 });
             });

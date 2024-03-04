@@ -25,7 +25,7 @@
                                    </tr>
                                </thead>
                                <tbody>
-                                   <tr v-for="listClient in filteredListClients" :key="listClient.idClient">
+                                   <tr v-for="listClient in filteredList" :key="listClient.idClient">
                                        <td class="text-center">{{listClient.idClient}}</td>
                                        <td class="text-center">{{listClient.nameClient}}</td>
                                        <td class="text-center">{{listClient.numOrder}}</td>
@@ -57,6 +57,18 @@ export default {
   props: {
     listClients: Array
   },
+    computed: {
+        filteredList() {
+            // Search logic: lowercase for case-insensitive search, filter based on ID, name, or order number
+            const lowerSearch = this.search.toLowerCase();
+            return this.listClients.filter(item => {
+                const lowerId = String(item.idClient).toLowerCase();
+                const lowerName = item.nameClient.toLowerCase();
+                const lowerOrder = String(item.numOrder).toLowerCase();
+                return lowerId.includes(lowerSearch) || lowerName.includes(lowerSearch) || lowerOrder.includes(lowerSearch);
+            });
+        },
+    },
   data() {
     return {
       breadcrumbs: {
@@ -69,21 +81,6 @@ export default {
         search: '',
     }
   },
-    computed: {
-        filteredListClients() {
-            if (this.search.length === 0) {
-                return this.listClients;
-            }
-            return this.listClients.filter(
-                item => {
-                    const idClient = item.idClient.toString().includes(this.search);
-                    const nameClient = item.nameClient.toLowerCase().includes(this.search.toLowerCase());
-                    const numOrder = item.numOrder.toString().includes(this.search);
-                    return idClient || nameClient || numOrder;
-                }
-            );
-        }
-    },
     methods: {
       totalListClients() {
         return this.listClients.length

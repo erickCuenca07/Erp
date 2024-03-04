@@ -15,12 +15,12 @@ Route::group(
             'verified',
         ])->group(function (){
             Route::group([
-                'prefix' => 'clients',
+                'prefix' => 'listClients',
             ], function () {
                 Route::group([
                     'middleware' => ['can:view,' .ListClientsModel ::class],
                 ], function () {
-                    Route::get('/', [ListClientsController::class, 'index'])->name('clients.index');
+                    Route::get('/', [ListClientsController::class, 'index'])->name('clients.listClients.index');
 
                 });
             });

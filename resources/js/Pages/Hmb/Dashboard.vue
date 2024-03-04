@@ -1166,7 +1166,7 @@
             </div>
           </div>
         </div>
-      </div> 
+      </div>
             <Footer />
         </div>
     </Layout>
@@ -1178,7 +1178,7 @@ import TopBar from "../../Layouts/Navbar/Topbar.vue";
 import Footer from "../../Layouts/Partials/Footer.vue";
 import {loadScript} from "vue-plugin-load-script";
 
-loadScript("/assets/js/plugins/chartjs.min.js");
+loadScript("/assets/js/plugins/jkanban/jkanban.js");
 
 export default {
     name: "Dashboard",
