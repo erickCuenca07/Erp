@@ -20,7 +20,7 @@
                         <span class="nav-link-text ms-1">Panel</span>
                     </Link>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['admin-ver permisos', 'admin-ver usuarios'])">
                     <a @click="toggleAdminMenu()" data-bs-toggle="collapse" href="#navbar-admin" class="nav-link" aria-controls="navbar-admin" role="button"
                         :class="{'active': $page.component.includes('Admin')}">
                         <div class="d-flex align-items-center">
@@ -30,13 +30,14 @@
                     </a>
                     <div id="navbar-admin" v-if="adminActive" :class="{active :adminActive}">
                         <ul class="nav ms-4">
-                            <li class="nav-item" :class="{'active' : $page.component === 'Admin/Users'}">
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'admin-ver usuarios')"
+                                :class="{'active' : $page.component === 'Admin/Users'}">
                                 <Link class="nav-link" :href="route('admin.users.index')">
                                 <span class="sidenav-normal">Usuarios</span>
                                 </Link>
                             </li>
                             <li class="nav-item " :class="{'active' : $page.component === 'Admin/Permissions'}">
-                                <Link class="nav-link" >
+                                <Link class="nav-link" :href="route('admin.permissions.index')">
                                 <span class="sidenav-normal">Permisos</span>
                                 </Link>
                             </li>

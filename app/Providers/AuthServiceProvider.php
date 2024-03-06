@@ -4,16 +4,16 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Admin\Users\Domain\Model\UserModel;
+use Admin\User\Infrastructure\Entrypoint\Http\Policies\UserPolicy;
+use Admin\Permissions\Infrastructure\Entrypoint\Http\Policies\PermissionsPolicy;
+use Admin\Permissions\Domain\Model\PermissionsModel;
 
 class AuthServiceProvider extends ServiceProvider
 {
-    /**
-     * The model to policy mappings for the application.
-     *
-     * @var array<class-string, class-string>
-     */
     protected $policies = [
-        //
+        UserModel::class => UserPolicy::class,
+        PermissionsModel::class => PermissionsPolicy::class
     ];
 
     /**
