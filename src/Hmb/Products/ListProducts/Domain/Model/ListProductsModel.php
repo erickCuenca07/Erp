@@ -1,54 +1,40 @@
 <?php
+
 namespace Products\ListProducts\Domain\Model;
+
 class ListProductsModel
 {
     public function __construct(
-        private readonly string $documentId,
-        private readonly string $productId,
-        private readonly string $nameProduct,
-        private readonly string $dateProductUp,
-        private readonly string $orderDate,
-        private readonly string $deliveryDate,
-        private readonly int $quantity
+        private readonly int $id,
+        private readonly string $name,
+        private readonly string $date,
+        private readonly string $nameSupplier
     ){}
+
     public function toArray(): array
     {
         return [
-            'documentId' => $this->getDocumentId(),
-            'productId' => $this->getProductId(),
-            'nameProduct' => $this->getNameProduct(),
-            'dateProductUp' => $this->getDateProductUp(),
-            'orderDate' => $this->getOrderDate(),
-            'deliveryDate' => $this->getDeliveryDate(),
-            'quantity' => $this->getQuantity(),
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'date' => $this->getDate(),
+            'nameSupplier' => $this->getNameSupplier(),
         ];
     }
-    public function getDocumentId(): string
+
+    public function getId(): int
     {
-        return $this->documentId;
+        return $this->id;
     }
-    public function getProductId(): string
+    public function getName(): string
     {
-        return $this->productId;
+        return $this->name;
     }
-    public function getNameProduct(): string
+    public function getDate(): string
     {
-        return $this->nameProduct;
+        return $this->date;
     }
-    public function getDateProductUp(): string
+    public function getNameSupplier(): string
     {
-        return $this->dateProductUp;
-    }
-    public function getOrderDate(): string
-    {
-        return $this->orderDate;
-    }
-    public function getDeliveryDate(): string
-    {
-        return $this->deliveryDate;
-    }
-    public function getQuantity(): int
-    {
-        return $this->quantity;
+        return $this->nameSupplier;
     }
 }

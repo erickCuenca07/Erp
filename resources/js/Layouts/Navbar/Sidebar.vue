@@ -72,9 +72,16 @@
                     </a>
                     <div id="navbar-products" v-if="productsActive" :class="{active :productsActive}">
                         <ul class="nav ms-4">
+                            <li class="nav-item" :class="{'active': $page.component === 'Products/HistoryListProducts'} ">
+                                <Link class="nav-link" :href="route('products.historyListProducts.index')">
+                                    <span class="sidenav-normal">Historial de Pedidos</span>
+                                </Link>
+                            </li>
+                        </ul>
+                        <ul class="nav ms-4">
                             <li class="nav-item" :class="{'active': $page.component === 'Products/ListProducts'} ">
                                 <Link class="nav-link" :href="route('products.listProducts.index')">
-                                    <span class="sidenav-normal">Lista de productos</span>
+                                    <span class="sidenav-normal">Lista de Productos</span>
                                 </Link>
                             </li>
                         </ul>

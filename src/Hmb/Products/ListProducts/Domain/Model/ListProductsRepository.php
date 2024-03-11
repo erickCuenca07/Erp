@@ -2,7 +2,7 @@
 
 namespace Products\ListProducts\Domain\Model;
 
-interface SearchListProductsRepository
+interface ListProductsRepository
 {
     public function search(): mixed;
 }

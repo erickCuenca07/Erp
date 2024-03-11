@@ -1,32 +1,39 @@
 <?php
+
 namespace Products\ListProducts\Infrastructure\Persistence\Mysql;
+
 use Illuminate\Support\Facades\DB;
 use Products\ListProducts\Domain\Model\ListProductsModel;
-use Products\ListProducts\Domain\Model\SearchListProductsRepository;
-class MysqlListProducts implements SearchListProductsRepository
+use Products\ListProducts\Domain\Model\ListProductsRepository;
+class MysqlListProducts implements ListProductsRepository
 {
     private string $connection = 'dbServer';
     private string $plProducts = 'imp.pl_articulos';
-    private string $plHPedCliCab = 'imp.pl_hpedcli_cab';
-    private string $plHPedCliLin = 'imp.pl_hpedcli_lin';
+    private string $plSuppliers = 'imp.pl_proveedores';
+    private string $pcSuppliers = 'imp.pc_proveedores';
     public function search(): mixed
     {
         return DB::connection($this->connection)
-            ->table('imp.pl_hpedcli_lin as hl')
-            ->select('hc.xnumdoc_id as idOrder', 'art.xarticulo_id as idArticle', 'art.xdescripcion as nameArticle', 'art.xfecha_alta as dateUp', 'hc.xfecha_pedido as orderDate', 'hc.xfecha_entrega as deliveryDate', 'hl.xcant_ser as quantity')
-            ->leftJoin('imp.pl_hpedcli_cab as hc', function($join) {
-                $join->on('hl.xempresa_id', '=', 'hc.xempresa_id')
-                    ->on('hl.xtipodoc_id', '=', 'hc.xtipodoc_id')
-                    ->on('hl.xnumdoc_id', '=', 'hc.xnumdoc_id');
+            ->table($this->plProducts . ' as art')
+            ->leftJoin($this->plSuppliers . ' as pl', 'art.xproveedor_id', '=', 'pl.xproveedor_id')
+            ->leftJoin($this->pcSuppliers . ' as pc', function ($join) {
+                $join->on('pl.xproveedor_id', '=', 'pc.xproveedor_id')
+                    ->on('pl.xempresa_id', '=', 'pc.xempgen_id');
             })
-            ->leftJoin('imp.pl_articulos as art', 'hl.xarticulo_id', '=', 'art.xarticulo_id')
-            ->where('hc.xfecha_pedido', '>=', '2019-01-01')
-            ->where(function ($query) {
-                $query->whereNotNull('hl.xcant_ser')
-                    ->where('hl.xcant_ser', '!=', 0);
-            })
-            ->orderByDesc('hc.xfecha_pedido')
-            ->orderBy('art.xfecha_alta')
-            ->paginate(4000);
+            ->where('art.xfecha_alta', '>=', '2019-01-01')
+            ->select('art.xarticulo_id', 'art.xdescripcion', 'art.xfecha_alta', 'pc.xnombre')
+            ->orderBy('art.xfecha_alta', 'asc')
+            ->get()
+            ->map(fn($item) => $this->mapListProducts($item)->toArray())
+            ->toArray();
+    }
+    public function mapListProducts($item): ListProductsModel
+    {
+        return new ListProductsModel(
+            $item->xarticulo_id,
+            $item->xdescripcion,
+            $item->xfecha_alta,
+            $item->xnombre
+        );
     }
 }

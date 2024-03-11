@@ -16,7 +16,7 @@
                         <hr>
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default">Buscador</span>
-                            <input autofocus v-model="searchTerm" type="text" class="form-control rounded" placeholder="Busca por nombre o id del cliente o número de pedido">
+                            <input autofocus v-model="searchTerm" type="text" class="form-control rounded" placeholder="Introduce datos del proveedor">
                         </div>
                         <!-- card body -->
                         <div class="car-body pt-0">
