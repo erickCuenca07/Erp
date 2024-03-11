@@ -17,8 +17,14 @@ class ApiDelSol implements RepositoryApiDelSol
 
     public function executeApiDelSol(): mixed
     {
+        $token = '';
         try {
-            return $this->api->login();
+            $response = $this->api->login();
+            if ($response['respuesta'] === 'OK') {
+                $token = $response['resultado'];
+            }
+            return $this->api->getAllSuppliers($token);
+           //return $this->api->ExecuteQuery($token);
         }catch (Exception $e) {
             throw new RuntimeException($e->getMessage());
         }
