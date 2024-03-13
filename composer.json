@@ -34,7 +34,8 @@
             "Products\\": "src/Hmb/Products/",
             "Api\\": "src/Hmb/Api/",
             "Suppliers\\": "src/Hmb/Suppliers/",
-            "Shared\\": "src/Hmb/Shared/"
+            "Shared\\": "src/Hmb/Shared/",
+            "Families\\": "src/Hmb/Families/"
         }
     },
     "autoload-dev": {

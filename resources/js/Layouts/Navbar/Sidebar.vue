@@ -88,6 +88,24 @@
                     </div>
                 </li>
                 <li class="nav-item">
+                    <a @click="toggleFamiliesMenu()" data-bs-toggle="collapse" href="#navbar-families" class="nav-link " aria-controls="navbar-families" role="button"
+                       :class="{'active': $page.component.includes('Families') }">
+                        <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                            <i class="fa-solid fa-clipboard text-info text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Familias</span>
+                    </a>
+                    <div id="navbar-families" v-if="familiesActive" :class="{active :familiesActive}">
+                        <ul class="nav ms-4">
+                            <li class="nav-item" :class="{'active': $page.component === 'Families/ListFamilies'}">
+                                <Link class="nav-link" :href="route('families.listFamilies.index')">
+                                    <span class="sidenav-normal">Lista de Familias</span>
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
                     <a @click="toggleApiMenu()" data-bs-toggle="collapse" href="#navbar-api" class="nav-link " aria-controls="navbar-api" role="button"
                         :class="{'active': $page.component.includes('Apis') }">
                         <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
@@ -160,7 +178,8 @@ export default {
             clientsActive: false,
             productsActive: false,
             apiActive: false,
-            suppliersActive: false
+            suppliersActive: false,
+            familiesActive: false,
         }
     },
     methods: {
@@ -178,6 +197,9 @@ export default {
         },
         toggleSuppliersMenu() {
             this.suppliersActive = !this.suppliersActive;
+        },
+        toggleFamiliesMenu() {
+            this.familiesActive = !this.familiesActive;
         }
     }
 }

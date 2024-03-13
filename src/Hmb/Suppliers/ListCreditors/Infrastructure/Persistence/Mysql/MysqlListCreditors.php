@@ -21,6 +21,7 @@ class MysqlListCreditors implements ListCreditorsRepository
             })
             ->whereNull('pl.xmodalidad_id')
             ->where('pl.xfecha_alta', '>=', '2019-01-01')
+            ->where('pl.xempresa_id', '=', 'SM')
             ->select('pc.xproveedor_id', 'pc.xnombre')
             ->distinct()
             ->get()
