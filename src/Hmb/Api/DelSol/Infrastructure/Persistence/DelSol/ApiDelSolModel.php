@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use RuntimeException;
 use Suppliers\ListSuppliers\Infrastructure\Persistence\Mysql\MysqlListSuppliers;
 use Families\ListFamilies\Infrastructure\Persistence\Mysql\MysqlListFamilies;
+use Suppliers\ListCreditors\Infrastructure\Persistence\Mysql\MysqlListCreditors;
 use GuzzleHttp\Client;
 use GuzzleHttp\Promise;
 use GuzzleHttp\Psr7\Request;
@@ -40,6 +41,22 @@ class ApiDelSolModel
             ])->post($url,[
                 "ejercicio"=> "2024",
                 "consulta"=> "SELECT CODPRO,NOFPRO,NIFPRO,DOMPRO,CPOPRO,PROPRO,TELPRO,FALPRO,PAIPRO FRom F_PRO "
+            ]);
+            return json_decode($response->body(), true, 512, JSON_THROW_ON_ERROR);
+        }catch (Exception $e) {
+            throw new RuntimeException($e->getMessage());
+        }
+    }
+    public function getAllCreditors($token)
+    {
+        try {
+            $url = env('DELSOL_URL_ADMIN').'/LanzarConsulta';
+            $response = Http::withOptions(['verify'=>false])-> withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer '.$token
+            ])->post($url,[
+                "ejercicio"=> "2024",
+                "consulta"=> "SELECT CODPRO,NOFPRO,NIFPRO,DOMPRO,CPOPRO,PROPRO,TELPRO,FALPRO,PAIPRO FRom F_PRO where TIPPRO= 1 "
             ]);
             return json_decode($response->body(), true, 512, JSON_THROW_ON_ERROR);
         }catch (Exception $e) {
@@ -115,9 +132,43 @@ class ApiDelSolModel
                 'Authorization' => 'Bearer ' . $token
             ], json_encode([
                 "ejercicio" => "2024",
-                "tabla" => "F_FAM",
+                "tabla" => "F_PRO",
                 "registro" => [
                     ["columna"=>"CODPRO","dato"=> $value['CODPRO']],
+                    ["columna"=>"NOFPRO","dato"=> $value['NOFPRO']],
+                    ["columna"=>"NIFPRO", "dato"=>$value['NIFPRO']],
+                    ["columna"=>"DOMPRO", "dato"=>$value['DOMPRO']],
+                    ["columna"=>"CPOPRO", "dato"=>$value['CPOPRO']],
+                    ["columna"=>"PROPRO", "dato"=>$value['PROPRO']],
+                    ["columna"=>"TELPRO", "dato"=>$value['TELPRO']],
+                    ["columna"=>"FALPRO", "dato"=>$value['FALPRO']],
+                    ["columna"=>"PAIPRO", "dato"=>$value['PAIPRO']],
+                ]
+            ], JSON_THROW_ON_ERROR));
+            $promises[] = $client->sendAsync($request);
+        }
+        return $this->getResponseApi($promises);
+    }
+
+    /**
+     * @throws \JsonException
+     */
+    public function insertCreditors($token): array
+    {
+        $client = new Client(['verify' => false]);
+        $listCreditors= $this->getListCreditorsFiltered();
+        $url = env('DELSOL_URL_ADMIN').'/EscribirRegistro';
+        $promises = [];
+        foreach ($listCreditors as $value) {
+            $request = new Request('POST', $url, [
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . $token
+            ], json_encode([
+                "ejercicio" => "2024",
+                "tabla" => "F_PRO",
+                "registro" => [
+                    ["columna"=>"CODPRO","dato"=> $value['CODPRO']],
+                    ["columna"=>"TIPPRO","dato"=> 1],
                     ["columna"=>"NOFPRO","dato"=> $value['NOFPRO']],
                     ["columna"=>"NIFPRO", "dato"=>$value['NIFPRO']],
                     ["columna"=>"DOMPRO", "dato"=>$value['DOMPRO']],
@@ -160,6 +211,18 @@ class ApiDelSolModel
             }
         }
         return array_values($listSuppliersArray);
+    }
+    public function getListCreditorsFiltered()
+    {
+        $listCreditors = new MysqlListCreditors();
+        $listCreditorsArray = $listCreditors->search();
+        foreach ($listCreditorsArray as $key => $value) {
+            if ($value['CODPRO'] == '01351' || $value['CODPRO'] == '01352' || $value['CODPRO'] == '01353' || $value['CODPRO'] == '01354' ||
+                $value['CODPRO'] == '01355' || $value['CODPRO'] == '01357' || $value['CODPRO'] == '01358' || $value['CODPRO'] == '01359' || $value['CODPRO'] == '01360' || $value['CODPRO'] == '01361') {
+                unset($listCreditorsArray[$key]);
+            }
+        }
+        return array_values($listCreditorsArray);
     }
     public function getAllFamiliesSql()
     {
