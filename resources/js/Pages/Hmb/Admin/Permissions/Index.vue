@@ -117,9 +117,6 @@ export default {
             namePermissions = namePermissions.slice(0, -2);
             this.modalPermissions = namePermissions;
         },
-        editRole(id) {
-            console.log(id);
-        }
     }
 }
 </script>

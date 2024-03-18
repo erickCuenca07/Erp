@@ -40,7 +40,7 @@ class ApiDelSolModel
                 'Authorization' => 'Bearer '.$token
             ])->post($url,[
                 "ejercicio"=> "2024",
-                "consulta"=> "SELECT CODPRO,NOFPRO,NIFPRO,DOMPRO,CPOPRO,PROPRO,TELPRO,FALPRO,PAIPRO FRom F_PRO "
+                "consulta"=> "SELECT CODPRO,NOFPRO,NIFPRO,DOMPRO,CPOPRO,PROPRO,TELPRO,FALPRO,PAIPRO FRom F_PRO where TIPPRO= 0 "
             ]);
             return json_decode($response->body(), true, 512, JSON_THROW_ON_ERROR);
         }catch (Exception $e) {

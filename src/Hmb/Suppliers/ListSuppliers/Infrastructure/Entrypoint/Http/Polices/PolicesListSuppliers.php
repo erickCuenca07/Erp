@@ -8,6 +8,6 @@ class PolicesListSuppliers
     use HandlesAuthorization;
     public function view(User $user): bool
     {
-        return $user->can('proveedores-ver proveedor');
+        return $user->can('proveedores-ver-lista-proveedores');
     }
 }

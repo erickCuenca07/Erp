@@ -9,6 +9,6 @@ class ListProductsPolices
 
     public function view(User $user): bool
     {
-        return $user->can('productos-ver productos');
+        return $user->can('productos-ver-lista-productos');
     }
 }

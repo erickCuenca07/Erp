@@ -5,8 +5,13 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header pb-0">
-                            <h3>Tenemos {{ totalListFamilies() }} familias.</h3><br>
+                        <div class="card-header pb-0 d-flex justify-content-between">
+                            <div class="align-self-start">
+                                <h3>Tenemos {{ totalListFamilies() }} familias.</h3>
+                            </div>
+                            <button @click="exportToExcel()" class="btn bg-gradient-success  ">
+                                <i class="fa-regular fa-file-excel"></i>
+                            </button>
                         </div>
                         <hr>
                         <div class="input-group mb-3">
@@ -45,6 +50,7 @@
 import {Link} from '@inertiajs/inertia-vue3'
 import Layout from '../../../../Layouts/Layout.vue';
 import TopBar from '../../../../Layouts/Navbar/Topbar.vue';
+import ExcelJS from "exceljs";
 
 export default {
     name: "Index ListFamilies",
@@ -112,6 +118,48 @@ export default {
                 this.sortDirection = 'asc';
             }
         },
+        exportToExcel: async function () {
+            const date = new Date();
+            const year = date.getFullYear();
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const seconds = date.getSeconds().toString().padStart(2, '0');
+
+            const data = this.listFamilies;
+            const fileName = `Lista de Familias_${day}-${month}-${year}_${hours}-${minutes}-${seconds}.xlsx`;
+
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('Familias');
+
+            const customHeaders = [
+                'Id','Nombre'
+            ];
+            const headerRow = worksheet.addRow(customHeaders);
+
+            headerRow.eachCell((cell) => {
+                cell.font = {
+                    bold: true,
+                };
+            });
+            data.forEach(item => {
+                const rowValues = [
+                    item.CODFAM,
+                    item.DESFAM
+                ];
+                worksheet.addRow(rowValues);
+            });
+
+            const buffer = await workbook.xlsx.writeBuffer();
+            const blob = new Blob([buffer], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            a.click();
+        }
     },
 }
 </script>

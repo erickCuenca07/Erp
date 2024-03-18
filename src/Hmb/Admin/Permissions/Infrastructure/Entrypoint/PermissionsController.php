@@ -2,7 +2,7 @@
 
 namespace Admin\Permissions\Infrastructure\Entrypoint;
 
-use http\Exception\RuntimeException;
+use RuntimeException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -32,7 +32,7 @@ class PermissionsController
             'permissions' => Permission::all()->sortBy(['name'])->toArray(),
         ]);
     }
-    public function permissionCreate(Request $request): \Illuminate\Http\RedirectResponse
+    public function permissionCreate(Request $request): array
     {
         try {
             Permission::create([
@@ -41,6 +41,6 @@ class PermissionsController
         }catch (\Exception $e){
             throw new RuntimeException ($e->getMessage());
         }
-        return Redirect::back()->with('success', 'Permiso creado correctamente.');
+        return ['success', 'Permiso creado correctamente.'];
     }
 }

@@ -23,6 +23,11 @@ Route::group(
                     'middleware' => ['can:view,' . UserModel::class],
                 ], function () {
                     Route::get('/', [UsersController::class, 'index'])->name('admin.users.index');
+                    Route::get('/createUser', [UsersController::class, 'createIndex'])->name('admin.users.create');
+                    Route::post('/insert', [UsersController::class, 'insert'])->name('admin.users.insert');
+                    Route::post('/delete', [UsersController::class, 'delete'])->name('admin.users.delete');
+                    Route::get('/edit{id}', [UsersController::class, 'edit'])->name('admin.users.edit');
+                    Route::post('/update', [UsersController::class, 'update'])->name('admin.users.update');
                 });
             });
             Route::group([

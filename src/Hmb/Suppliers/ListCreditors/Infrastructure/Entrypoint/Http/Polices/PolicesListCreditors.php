@@ -9,6 +9,6 @@ class PolicesListCreditors
     use HandlesAuthorization;
     public function view(User $user): bool
     {
-        return $user->can('proveedores-ver acreedores');
+        return $user->can('proveedores-ver-lista-acreedores');
     }
 }

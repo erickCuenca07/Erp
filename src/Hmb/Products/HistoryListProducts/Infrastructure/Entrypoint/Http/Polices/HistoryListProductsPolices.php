@@ -9,6 +9,6 @@ class HistoryListProductsPolices
 
     public function view(User $user): bool
     {
-        return $user->can('productos-ver hitorial de productos');
+        return $user->can('productos-ver-hitorial-productos');
     }
 }

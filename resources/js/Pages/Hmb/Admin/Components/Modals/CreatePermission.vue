@@ -4,7 +4,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="form-control-label" for="createPermission">Crear Permiso</label>
+                        <label class="form-control-label" >Crear Permiso</label>
                         <input autofocus required v-model.trim="permission" type="text" class="form-control rounded" placeholder="Nombre del Permiso">
                     </div>
                 </div>
@@ -34,17 +34,18 @@ export default {
     },
     methods: {
         createPermission: function () {
-            if (this.permission === "") {
+            if (this.permission.trim() === "") {
                 notify('El campo no puede estar vacio');
                 return;
             }
-            this.$inertia.post(route('admin.permissions.create'), {
-                name: this.permission,
-            }, {
-                onSuccess: () => {
+            axios.post(route('admin.permissions.create'), {name: this.permission})
+                .then((response) => {
+                    notify(response.data[1], response.data[0]);
                     this.permission = "";
-                },
-            });
+                })
+                .catch((error) => {
+                    notify(error.response.data.message, 'error');
+                });
         },
     },
 }
