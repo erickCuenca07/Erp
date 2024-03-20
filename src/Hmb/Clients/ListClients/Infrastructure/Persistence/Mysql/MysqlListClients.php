@@ -24,6 +24,7 @@ class MysqlListClients implements ListClientsRepository
             })
             ->leftJoin($this->pl_hPedCliCab.' as ph', 'pc.xcliente_id', '=', 'ph.xcliente_id')
             ->where('ph.xfecha_pedido','>=','2019-01-01')
+            ->where('pc.xempgen_id', '=', 'SM')
             ->select('pc.xcliente_id',DB::raw('COUNT(ph.xnumdoc_id) as numOrder'),'pc.xnombre')
             ->groupBy('pc.xcliente_id','pc.xnombre')
             ->orderBy('numOrder', 'desc')

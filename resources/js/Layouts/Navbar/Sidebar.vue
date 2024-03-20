@@ -36,7 +36,8 @@
                                 <span class="sidenav-normal">Usuarios</span>
                                 </Link>
                             </li>
-                            <li class="nav-item " :class="{'active' : $page.component === 'Admin/Permissions'}">
+                            <li class="nav-item " v-if="this.$permissions(this.$page.props.auth.user, 'admin-ver permisos')"
+                                :class="{'active' : $page.component === 'Admin/Permissions'}">
                                 <Link class="nav-link" :href="route('admin.permissions.index')">
                                 <span class="sidenav-normal">Permisos</span>
                                 </Link>
@@ -44,7 +45,7 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['clientes-ver clientes'])">
                     <a @click="toggleClientsMenu()" data-bs-toggle="collapse" href="#navbar-clients" class="nav-link " aria-controls="navbar-clients" role="button"
                         :class="{'active': $page.component.includes('Clients') }">
                         <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
@@ -54,7 +55,8 @@
                     </a>
                     <div id="navbar-clients" v-if="clientsActive" :class="{active :clientsActive}">
                         <ul class="nav ms-4">
-                            <li class="nav-item" :class="{'active': $page.component === 'Clients/ListClients'} ">
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'clientes-ver clientes')"
+                                :class="{'active': $page.component === 'Clients/ListClients'} ">
                                 <Link class="nav-link" :href="route('clients.listClients.index')">
                                 <span class="sidenav-normal">Lista de clientes</span>
                                 </Link>
@@ -62,7 +64,7 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['productos-ver-hitorial-productos', 'productos-ver-lista-productos'])">
                     <a @click="toggleProductsMenu()" data-bs-toggle="collapse" href="#navbar-products" class="nav-link " aria-controls="navbar-products" role="button"
                         :class="{'active': $page.component.includes('Products') }">
                         <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
@@ -72,22 +74,24 @@
                     </a>
                     <div id="navbar-products" v-if="productsActive" :class="{active :productsActive}">
                         <ul class="nav ms-4">
-                            <li class="nav-item" :class="{'active': $page.component === 'Products/HistoryListProducts'} ">
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'productos-ver-hitorial-productos')"
+                                :class="{'active': $page.component === 'Products/HistoryListProducts'} ">
                                 <Link class="nav-link" :href="route('products.historyListProducts.index')">
                                     <span class="sidenav-normal">Historial de Pedidos</span>
                                 </Link>
                             </li>
                         </ul>
                         <ul class="nav ms-4">
-                            <li class="nav-item" :class="{'active': $page.component === 'Products/ListProducts'} ">
-                                <Link class="nav-link" :href="route('products.listProducts.index')">
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'productos-ver-lista-productos')"
+                            :class="{'active': $page.component === 'Products/ListProducts'} ">
+                            <Link class="nav-link" :href="route('products.listProducts.index')">
                                     <span class="sidenav-normal">Lista de Productos</span>
                                 </Link>
                             </li>
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['familias-ver-lista-familias'])">
                     <a @click="toggleFamiliesMenu()" data-bs-toggle="collapse" href="#navbar-families" class="nav-link " aria-controls="navbar-families" role="button"
                        :class="{'active': $page.component.includes('Families') }">
                         <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
@@ -97,7 +101,8 @@
                     </a>
                     <div id="navbar-families" v-if="familiesActive" :class="{active :familiesActive}">
                         <ul class="nav ms-4">
-                            <li class="nav-item" :class="{'active': $page.component === 'Families/ListFamilies'}">
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'familias-ver-lista-familias')"
+                                :class="{'active': $page.component === 'Families/ListFamilies'}">
                                 <Link class="nav-link" :href="route('families.listFamilies.index')">
                                     <span class="sidenav-normal">Lista de Familias</span>
                                 </Link>
@@ -105,7 +110,7 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['apis-ver-pruebas'])">
                     <a @click="toggleApiMenu()" data-bs-toggle="collapse" href="#navbar-api" class="nav-link " aria-controls="navbar-api" role="button"
                         :class="{'active': $page.component.includes('Apis') }">
                         <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
@@ -123,7 +128,7 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['proveedores-ver-lista-proveedores', 'proveedores-ver-lista-acreedores'])">
                     <a data-bs-toggle="collapse" href="#navbar-suppliers" class="nav-link " aria-controls="navbar-api" role="button"
                         :class="{'active': $page.component.includes('Suppliers'), 'collapsed': !$page.component.includes('Suppliers')}"
                         @click="toggleSuppliersMenu()">
@@ -134,12 +139,14 @@
                     </a>
                     <div id="navbar-suppliers" v-if="suppliersActive"  :class="{active :suppliersActive}">
                         <ul class="nav ms-4">
-                            <li class="nav-item" :class="{'active': $page.component === 'Suppliers/ListSuppliers'}">
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'proveedores-ver-lista-proveedor')"
+                                :class="{'active': $page.component === 'Suppliers/ListSuppliers'}">
                                 <Link class="nav-link" :href="route('suppliers.listSuppliers.index')">
                                     <span class="sidenav-normal">Lista de Proveedores</span>
                                 </Link>
                             </li>
-                            <li class="nav-item" :class="{'active': $page.component === 'Suppliers/ListCreditors'} ">
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'proveedores-ver-lista-acreedor')"
+                                :class="{'active': $page.component === 'Suppliers/ListCreditors'} ">
                                 <Link class="nav-link" :href="route('suppliers.listCreditors.index')">
                                     <span class="sidenav-normal">Lista de Acreedores</span>
                                 </Link>

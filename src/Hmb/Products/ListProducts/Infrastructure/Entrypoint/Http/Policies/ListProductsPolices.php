@@ -1,14 +1,14 @@
 <?php
-
-namespace Suppliers\ListCreditors\Infrastructure\Entrypoint\Http\Polices;
+namespace Products\ListProducts\Infrastructure\Entrypoint\Http\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-class PolicesListCreditors
+class ListProductsPolices
 {
     use HandlesAuthorization;
+
     public function view(User $user): bool
     {
-        return $user->can('proveedores-ver-lista-acreedores');
+        return $user->can('productos-ver-lista-productos');
     }
 }

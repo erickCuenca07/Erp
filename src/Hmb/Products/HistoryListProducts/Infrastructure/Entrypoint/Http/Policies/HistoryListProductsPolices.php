@@ -1,5 +1,5 @@
 <?php
-namespace Products\HistoryListProducts\Infrastructure\Entrypoint\Http\Polices;
+namespace Products\HistoryListProducts\Infrastructure\Entrypoint\Http\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;

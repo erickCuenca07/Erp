@@ -1,5 +1,5 @@
-<?php 
-namespace Clients\ListClients\Infrastructure\Entrypoint\Http\Polices;
+<?php
+namespace Clients\ListClients\Infrastructure\Entrypoint\Http\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;

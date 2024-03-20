@@ -1,15 +1,13 @@
 <?php
-
-namespace Families\ListFamilies\Infrastructure\Entrypoint\Http\Polices;
+namespace Suppliers\ListSuppliers\Infrastructure\Entrypoint\Http\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-class ListFamiliesPolices
+class PolicesListSuppliers
 {
     use HandlesAuthorization;
-
     public function view(User $user): bool
     {
-        return $user->can('familias-ver familias');
+        return $user->can('proveedores-ver-lista-proveedores');
     }
 }

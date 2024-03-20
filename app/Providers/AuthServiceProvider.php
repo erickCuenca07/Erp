@@ -8,12 +8,30 @@ use Admin\Users\Domain\Model\UserModel;
 use Admin\User\Infrastructure\Entrypoint\Http\Policies\UserPolicy;
 use Admin\Permissions\Infrastructure\Entrypoint\Http\Policies\PermissionsPolicy;
 use Admin\Permissions\Domain\Model\PermissionsModel;
+use Clients\ListClients\Domain\Model\ListClientsModel;
+use Clients\ListClients\Infrastructure\Entrypoint\Http\Policies\ListClientsPolices;
+use Families\ListFamilies\Domain\Model\ListFamiliesModel;
+use Families\ListFamilies\Infrastructure\Entrypoint\Http\Policies\ListFamiliesPolices;
+use Products\ListProducts\Domain\Model\ListProductsModel;
+use Products\ListProducts\Infrastructure\Entrypoint\Http\Policies\ListProductsPolices;
+use Products\HistoryListProducts\Domain\Model\HistoryListProductsModel;
+use Products\HistoryListProducts\Infrastructure\Entrypoint\Http\Policies\HistoryListProductsPolices;
+use Suppliers\ListSuppliers\Domain\Model\ListSuppliersModel;
+use Suppliers\ListSuppliers\Infrastructure\Entrypoint\Http\Policies\PolicesListSuppliers;
+use Suppliers\ListCreditors\Domain\Model\ListCreditorsModel;
+use Suppliers\ListCreditors\Infrastructure\Entrypoint\Http\Policies\PolicesListCreditors;
 
 class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
         UserModel::class => UserPolicy::class,
-        PermissionsModel::class => PermissionsPolicy::class
+        PermissionsModel::class => PermissionsPolicy::class,
+        ListClientsModel::class => ListClientsPolices::class,
+        ListFamiliesModel::class => ListFamiliesPolices::class,
+        ListProductsModel::class => ListProductsPolices::class,
+        HistoryListProductsModel::class => HistoryListProductsPolices::class,
+        ListSuppliersModel::class => PolicesListSuppliers::class,
+        ListCreditorsModel::class => PolicesListCreditors::class
     ];
 
     /**
