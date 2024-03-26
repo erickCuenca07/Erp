@@ -1,13 +1,13 @@
 <template>
     <div class="min-height-300 bg-primary position-absolute w-100"></div>
     <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 " id="sidenav-main">
-    <div class="sidenav-header">
-      <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-      <a class="navbar-brand m-0">
-        <img src="/assets/img/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
-        <span class="ms-1 font-weight-bold">Homebed Spain</span>
-      </a>
-    </div>
+        <div class="sidenav-header d-flex align-items-center"> <!-- Agregamos d-flex para que los elementos se comporten como una fila y align-items-center para centrar verticalmente -->
+            <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
+            <a class="navbar-brand m-0 d-flex align-items-center"> <!-- Agregamos d-flex y align-items-center para alinear horizontalmente los elementos -->
+                <img src="/assets/img/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
+                <span class="ms-1 font-weight-bold">Homebed Spain</span>
+            </a>
+        </div>
         <hr class="horizontal dark mt-0">
         <div class="navbar-collapse w-auto h-auto" id="sidenav-collapse-main">
             <ul class="navbar-nav">
@@ -154,6 +154,26 @@
                         </ul>
                     </div>
                 </li>
+                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['pedidos-ver-lista-pedidos-pendientes'])">
+                    <a data-bs-toggle="collapse" href="#navbar-orders" class="nav-link " aria-controls="navbar-orders" role="button"
+                       :class="{'active': $page.component.includes('Orders'), 'collapsed': !$page.component.includes('Orders')}"
+                       @click="toggleOrdersMenu()">
+                        <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                            <i class="ni ni-cart text-success text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Pedidos</span>
+                    </a>
+                    <div id="navbar-suppliers" v-if="ordersActive"  :class="{active :ordersActive}">
+                        <ul class="nav ms-4">
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'pedidos-ver-lista-pedidos-pendientes')"
+                                :class="{'active': $page.component === 'Orders/OrdersPendingService'}">
+                                <Link class="nav-link" :href="route('orders.listOrdersPendingService.index')">
+                                    <span class="sidenav-normal">Pedidos pendientes por Servir</span>
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </div>
         <!-- Divider -->
@@ -187,6 +207,7 @@ export default {
             apiActive: false,
             suppliersActive: false,
             familiesActive: false,
+            ordersActive: false,
         }
     },
     methods: {
@@ -207,6 +228,9 @@ export default {
         },
         toggleFamiliesMenu() {
             this.familiesActive = !this.familiesActive;
+        },
+        toggleOrdersMenu() {
+            this.ordersActive = !this.ordersActive;
         }
     }
 }
