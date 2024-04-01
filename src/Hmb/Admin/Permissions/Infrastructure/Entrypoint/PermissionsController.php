@@ -10,6 +10,9 @@ use Inertia\Response;
 use App\Models\User;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Admin\Permissions\Application\Handler\HandlerUpdatePermissionsRole;
+use Admin\Permissions\Domain\Service\ServiceUpdatePermissionsRole;
+use Admin\Permissions\Infrastructure\Persistence\Mysql\MysqlUpdatePermissionRole;
 class PermissionsController
 {
     public function index(): Response
@@ -42,5 +45,17 @@ class PermissionsController
             throw new RuntimeException ($e->getMessage());
         }
         return ['success', 'Permiso creado correctamente.'];
+    }
+
+    public function permissionUpdate(Request $request): array
+    {
+        $data = [
+            'id' => $request->input('id'),
+            'name' => $request->input('name'),
+            'permission' => $request->input('permission'),
+        ];
+        return (new HandlerUpdatePermissionsRole(
+            new ServiceUpdatePermissionsRole(new MysqlUpdatePermissionRole())
+        ))->handle($data);
     }
 }

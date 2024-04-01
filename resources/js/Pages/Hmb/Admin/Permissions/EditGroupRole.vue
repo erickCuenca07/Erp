@@ -10,7 +10,7 @@
                         </div>
                         <hr>
                         <div class="card-body">
-                            <form>
+                            <form @submit.prevent="this.update">
                                 <div class="pl-lg-4">
                                     <input type="hidden" v-model="permissionsGroup.id" />
                                     <div class="form-group col-md-6">
@@ -50,6 +50,13 @@
 import { Link } from '@inertiajs/inertia-vue3'
 import Layout from '../../../../Layouts/Layout.vue';
 import TopBar from '../../../../Layouts/Navbar/Topbar.vue';
+import {toast} from "vue3-toastify";
+
+const notify = ( message, type="warning") =>
+    toast(message, {
+        type: type,
+        theme: "auto",
+    });
 
 export default {
     name: "EditGroupRole",
@@ -76,6 +83,28 @@ export default {
     methods: {
         check(id, list) {
             return list.some(item => item.id === id);
+        },
+        update(){
+            const checkedPermissions = document.querySelectorAll('input[type="checkbox"].permissions:checked');
+            const permissions = [];
+            checkedPermissions.forEach((permission) => {
+                permissions.push(parseInt(permission.value));
+            });
+            const data = {
+                id: this.permissionsGroup.id,
+                name:this.permissionsGroup.name,
+                permission: permissions
+            }
+            axios.post(route('admin.permissions.update'), data)
+                .then(response => {
+                    notify(response.data[0], response.data[1]);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                })
+                .catch(error => {
+                    notify(error.response.data.message, 'error');
+                });
         }
     }
 }

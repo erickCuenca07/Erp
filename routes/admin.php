@@ -40,6 +40,7 @@ Route::group(
                         Route::get('/', [PermissionsController::class, 'index'])->name('admin.permissions.index');
                         Route::get('/editGroupRole{id}', [PermissionsController::class, 'editGroupRole'])->name('admin.permissions.editGroupRole');
                         Route::post('/create', [PermissionsController::class, 'permissionCreate'])->name('admin.permissions.create');
+                        Route::post('/update', [PermissionsController::class, 'permissionUpdate'])->name('admin.permissions.update');
                     });
                 });
         });

@@ -64,7 +64,7 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['productos-ver-hitorial-productos', 'productos-ver-lista-productos'])">
+                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['productos-ver-hitorial-productos', 'productos-ver-lista-productos','productos-buscar-producto'])">
                     <a @click="toggleProductsMenu()" data-bs-toggle="collapse" href="#navbar-products" class="nav-link " aria-controls="navbar-products" role="button"
                         :class="{'active': $page.component.includes('Products') }">
                         <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
@@ -86,6 +86,14 @@
                             :class="{'active': $page.component === 'Products/ListProducts'} ">
                             <Link class="nav-link" :href="route('products.listProducts.index')">
                                     <span class="sidenav-normal">Lista de Productos</span>
+                                </Link>
+                            </li>
+                        </ul>
+                        <ul class="nav ms-4">
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'productos-buscar-producto')"
+                                :class="{'active': $page.component === 'Products/SearchArticle'} ">
+                                <Link class="nav-link" :href="route('products.searchArticle.index')">
+                                    <span class="sidenav-normal">Buscar Artículo</span>
                                 </Link>
                             </li>
                         </ul>
