@@ -38,7 +38,15 @@
                                     <tbody>
                                     <template v-for="list in filteredSuppliers">
                                         <tr>
-                                            <td class="text-center " v-for="item in list">{{ item.dato }}</td>
+                                            <td class="text-center text-xs"> {{ list.CODPRO }}</td>
+                                            <td class="text-center text-xs">{{ list.NOFPRO }}</td>
+                                            <td class="text-center text-xs">{{ list.NIFPRO }}</td>
+                                            <td class="text-center text-xs">{{ list.DOMPRO }}</td>
+                                            <td class="text-center text-xs">{{ list.CPOPRO }}</td>
+                                            <td class="text-center text-xs">{{ list.PROPRO }}</td>
+                                            <td class="text-center text-xs">{{ list.TELPRO }}</td>
+                                            <td class="text-center text-xs">{{ list.FALPRO }}</td>
+                                            <td class="text-center text-xs">{{ list.PAIPRO }}</td>
                                         </tr>
                                     </template>
                                     </tbody>
@@ -87,18 +95,18 @@ export default {
    computed: {
        filteredSuppliers() {
           if (!this.searchTerm.trim()) {
-            return this.listSuppliers.resultado;
+            return this.listSuppliers;
           }
            const searchTerm = this.searchTerm.trim().toLowerCase();
-           return this.listSuppliers.resultado.filter(supplier => {
+           return this.listSuppliers.filter(supplier => {
                return Object.values(supplier).some(valueObj => {
                    // Verificar si el valor es una cadena de texto
-                   if (typeof valueObj.dato === 'string') {
-                       return valueObj.dato.toLowerCase().includes(searchTerm);
+                   if (typeof valueObj === 'string') {
+                       return valueObj.toLowerCase().includes(searchTerm);
                    }
                    // Verificar si el valor es un número y convertirlo a cadena
-                   if (typeof valueObj.dato === 'number') {
-                       return valueObj.dato.toString().includes(searchTerm);
+                   if (typeof valueObj === 'number') {
+                       return valueObj.toString().includes(searchTerm);
                    }
                    // Si el valor no es una cadena ni un número, no se puede buscar
                    return false;
@@ -108,12 +116,7 @@ export default {
     },
     methods: {
         AllListSuppliers() {
-            if (this.listSuppliers && this.listSuppliers.resultado && Array.isArray(this.listSuppliers.resultado)) {// Verificar si la propiedad 'resultado' existe y es un array
-                return this.listSuppliers.resultado.length;
-            } else {
-                console.error("La estructura del objeto no es válida o no contiene la propiedad 'resultado'.");
-                return 0;
-            }
+            return this.listSuppliers.length
         },
         scrollToTop() {
             window.scrollTo({
@@ -150,13 +153,19 @@ export default {
                     bold: true,
                 };
             });
-            data.resultado.forEach(supplier => {
-                const rowData = {};
-                supplier.forEach(item => {
-                    rowData[item.columna] = item.dato;
-                });
-                const rowValues = customHeaders.map(header => rowData[header]);
-                worksheet.addRow(rowValues);
+            data.forEach(item => {
+                const rowData = [
+                    item.CODPRO,
+                    item.NOFPRO,
+                    item.NIFPRO,
+                    item.DOMPRO,
+                    item.TELPRO,
+                    item.FALPRO,
+                    item.PAIPRO,
+                    item.PROPRO,
+                    item.CPOPRO,
+                ];
+                worksheet.addRow(rowData);
             });
 
             const buffer = await workbook.xlsx.writeBuffer();

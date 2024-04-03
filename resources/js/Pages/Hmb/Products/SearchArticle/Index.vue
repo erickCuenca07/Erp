@@ -77,10 +77,11 @@ import Layout from '../../../../Layouts/Layout.vue';
 import TopBar from '../../../../Layouts/Navbar/Topbar.vue';
 import {toast} from "vue3-toastify";
 
-const notify = ( message, type="warning") =>
+const notify = ( message, type="warning",autoClose = true) =>
     toast(message, {
         type: type,
         theme: "auto",
+        autoClose: autoClose,
     });
 
 export default {
@@ -121,7 +122,7 @@ export default {
                     this.showTable = true
                 }).catch((error) => {
                     this.isShowSpinner = false;
-                    notify(error.response.data.message, 'error');
+                    notify(error.response.data.message, 'error', false);
                 });
         }
     }

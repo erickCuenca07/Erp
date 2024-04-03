@@ -7,7 +7,7 @@ use Suppliers\ListCreditors\Domain\Model\ListCreditorsModel;
 use Suppliers\ListCreditors\Domain\Model\ListCreditorsRepository;
 class MysqlListCreditors implements ListCreditorsRepository
 {
-    private string $connection='dbServer';
+    private string $connection='sqlsrv';
     private string $plSuppliers = 'imp.pl_proveedores';
     private string $pcSuppliers = 'imp.pc_proveedores';
     private string $country = 'imp.pc_paises';

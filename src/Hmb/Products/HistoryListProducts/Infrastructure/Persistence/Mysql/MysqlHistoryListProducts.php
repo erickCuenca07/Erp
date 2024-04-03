@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\DB;
 use Products\HistoryListProducts\Domain\Model\HistoryListProductsRepository;
 class MysqlHistoryListProducts implements HistoryListProductsRepository
 {
-    private string $connection = 'dbServer';
+    private string $connection = 'sqlsrv';
     private string $plProducts = 'imp.pl_articulos';
     private string $plHPedCliCab = 'imp.pl_hpedcli_cab';
     private string $plHPedCliLin = 'imp.pl_hpedcli_lin';

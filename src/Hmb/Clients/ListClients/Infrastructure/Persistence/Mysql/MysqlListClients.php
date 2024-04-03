@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class MysqlListClients implements ListClientsRepository
 {
-    private string $connection = 'dbServer';
+    private string $connection = 'sqlsrv';
     private string $pc_clients = 'imp.pc_clientes';
     private string $pl_clients = 'imp.pl_clientes';
     private string $pl_hPedCliCab = 'imp.pl_hpedcli_cab';

@@ -6,7 +6,7 @@ use Suppliers\ListSuppliers\Domain\Model\ListSuppliersModel;
 use Suppliers\ListSuppliers\Domain\Model\ListSuppliersRepository;
 class MysqlListSuppliers implements ListSuppliersRepository
 {
-    private string $connection = 'dbServer';
+    private string $connection = 'sqlsrv';
     private string $plSuppliers = 'imp.pl_proveedores';
     private string $pcSuppliers = 'imp.pc_proveedores';
     private string $plArticles = 'imp.pl_articulos';
@@ -27,6 +27,7 @@ class MysqlListSuppliers implements ListSuppliersRepository
                     ->on('pc.xpais_id', '=', 'pro.xpais_id');
             })
             ->where('art.xfecha_alta', '>=', '2019-01-01')
+            ->where('pc.xempgen_id', '=', 'SM')
             ->select('pc.xproveedor_id', 'pc.xnombre','pc.xnif','pc.xdomicilio','pc.xcod_postal','pro.xnombre as province','pl.xtelefono','pl.xfecha_alta','pa.xnombre as country')
             ->distinct()
             ->get()

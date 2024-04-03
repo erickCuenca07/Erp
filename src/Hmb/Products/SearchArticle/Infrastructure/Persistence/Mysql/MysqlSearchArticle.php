@@ -8,7 +8,7 @@ use Products\SearchArticle\Domain\Model\SearchArticleModel;
 
 class MysqlSearchArticle implements RepositorySearchArticleModel
 {
-    private string $connection = 'dbServer';
+    private string $connection = 'sqlsrv';
     private string $articles = 'imp.pl_articulos';
     private string $stock = 'imp.pl_existalm';
     private string $store ='imp.pl_almacenes';

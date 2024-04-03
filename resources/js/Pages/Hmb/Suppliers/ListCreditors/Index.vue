@@ -38,7 +38,15 @@
                                     <tbody>
                                         <template v-for="list in filteredList">
                                             <tr>
-                                                <td class="text-center" v-for="item in list">{{ item.dato }}</td>
+                                                <td class="text-center text-xs">{{ list.CODPRO }}</td>
+                                                <td class="text-center text-xs">{{ list.NOFPRO }}</td>
+                                                <td class="text-center text-xs">{{ list.NIFPRO }}</td>
+                                                <td class="text-center text-xs">{{ list.DOMPRO }}</td>
+                                                <td class="text-center text-xs">{{ list.CPOPRO }}</td>
+                                                <td class="text-center text-xs">{{ list.PROPRO }}</td>
+                                                <td class="text-center text-xs">{{ list.TELPRO }}</td>
+                                                <td class="text-center text-xs">{{ list.FALPRO }}</td>
+                                                <td class="text-center text-xs">{{ list.PAIPRO }}</td>
                                             </tr>
                                         </template>
                                     </tbody>
@@ -88,18 +96,18 @@ export default {
     computed: {
         filteredList() {
             if (!this.searchTerm.trim()) {
-                return this.listCreditors.resultado;
+                return this.listCreditors;
             }
             const searchTerm = this.searchTerm.trim().toLowerCase();
-            return this.listCreditors.resultado.filter(supplier => {
+            return this.listCreditors.filter(supplier => {
                 return Object.values(supplier).some(valueObj => {
                     // Verificar si el valor es una cadena de texto
-                    if (typeof valueObj.dato === 'string') {
-                        return valueObj.dato.toLowerCase().includes(searchTerm);
+                    if (typeof valueObj === 'string') {
+                        return valueObj.toLowerCase().includes(searchTerm);
                     }
                     // Verificar si el valor es un número y convertirlo a cadena
-                    if (typeof valueObj.dato === 'number') {
-                        return valueObj.dato.toString().includes(searchTerm);
+                    if (typeof valueObj === 'number') {
+                        return valueObj.toString().includes(searchTerm);
                     }
                     // Si el valor no es una cadena ni un número, no se puede buscar
                     return false;
@@ -109,13 +117,7 @@ export default {
     },
     methods: {
         totalListCreditors() {
-            if (this.listCreditors && this.listCreditors.resultado && Array.isArray(this.listCreditors.resultado)) {// Verificar si la propiedad 'resultado' existe y es un array
-                return this.listCreditors.resultado.length;
-            } else {
-                console.error("La estructura del objeto no es válida o no contiene la propiedad 'resultado'.");
-                console.log(this.listCreditors)
-                return 0;
-            }
+            return this.listCreditors.length
         },
         scrollToTop() {
             window.scrollTo({
@@ -152,12 +154,18 @@ export default {
                     bold: true,
                 };
             });
-            data.resultado.forEach(supplier => {
-                const rowData = {};
-                supplier.forEach(item => {
-                    rowData[item.columna] = item.dato;
-                });
-                const rowValues = customHeaders.map(header => rowData[header]);
+            data.forEach(item => {
+                const rowValues = [
+                    item.CODPRO,
+                    item.NOFPRO,
+                    item.NIFPRO,
+                    item.DOMPRO,
+                    item.TELPRO,
+                    item.FALPRO,
+                    item.PAIPRO,
+                    item.PROPRO,
+                    item.CPOPRO,
+                ]
                 worksheet.addRow(rowValues);
             });
 

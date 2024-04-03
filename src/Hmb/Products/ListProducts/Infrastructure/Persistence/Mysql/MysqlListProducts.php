@@ -7,7 +7,7 @@ use Products\ListProducts\Domain\Model\ListProductsModel;
 use Products\ListProducts\Domain\Model\ListProductsRepository;
 class MysqlListProducts implements ListProductsRepository
 {
-    private string $connection = 'dbServer';
+    private string $connection = 'sqlsrv';
     private string $plProducts = 'imp.pl_articulos';
     private string $plSuppliers = 'imp.pl_proveedores';
     private string $pcSuppliers = 'imp.pc_proveedores';

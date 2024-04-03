@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class MysqlListFamilies implements ListFamiliesRepository
 {
-    private string $connection = 'dbServer';
+    private string $connection = 'sqlsrv';
     private string $plFamilies = 'imp.pl_familias';
     private string $plArticles = 'imp.pl_articulos';
     public function search(): mixed
