@@ -9,7 +9,7 @@ use Orders\OrdersPendingService\Domain\Model\OrdersPendingServiceRepository;
 
 class MysqlOrdersPendingService implements OrdersPendingServiceRepository
 {
-    private string $connection='dbServer';
+    private string $connection='sqlsrv';
     private string $plCab = 'imp.pl_pedcli_cab';
     private string $plWayToPay = 'imp.pc_fpago';
     private string $plLin = 'imp.pl_pedcli_lin';

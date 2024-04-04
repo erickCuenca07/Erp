@@ -11,17 +11,13 @@
                                 <div class="col-12 col-lg-8 m-auto">
                                     <form class="multisteps-form__form mb-8" @submit.prevent="submit">
                                         <div class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active" data-animation="FadeIn">
-                                            <h5 class="font-weight-bolder mb-0">Sobre el usuario</h5>
+                                            <h5 class="font-weight-bolder mb-0">Datos Sobre el usuario</h5>
                                             <p class="mb-0 text-sm">Rellene estos campo</p>
                                             <div class="multisteps-form__content">
                                                 <div class="row mt-3">
                                                     <div class="col-12 col-sm-6">
                                                         <label>Nombre</label>
                                                         <input required class="multisteps-form__input form-control rounded" type="text" placeholder="eg. Michael" v-model="form.name"/>
-                                                    </div>
-                                                    <div class="col-12 col-sm-6 mt-3 mt-sm-0">
-                                                        <label>Apellidos</label>
-                                                        <input class="multisteps-form__input form-control rounded" type="text" id="lastName" placeholder="eg. Prior" />
                                                     </div>
                                                 </div>
                                                 <div class="row mt-3">

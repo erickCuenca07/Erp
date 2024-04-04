@@ -20,6 +20,10 @@ use Suppliers\ListSuppliers\Domain\Model\ListSuppliersModel;
 use Suppliers\ListSuppliers\Infrastructure\Entrypoint\Http\Policies\PolicesListSuppliers;
 use Suppliers\ListCreditors\Domain\Model\ListCreditorsModel;
 use Suppliers\ListCreditors\Infrastructure\Entrypoint\Http\Policies\PolicesListCreditors;
+use Products\SearchArticle\Domain\Model\SearchArticleModel;
+use Products\SearchArticle\Infrastructure\Entrypoint\Http\Policies\SearchArticlePolices;
+use Orders\OrdersPendingService\Domain\Model\OrdersPendingServiceModel;
+use Orders\OrdersPendingService\Infrastructure\Entrypoint\Http\Policies\OrdersPendingPolicies;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -31,7 +35,9 @@ class AuthServiceProvider extends ServiceProvider
         ListProductsModel::class => ListProductsPolices::class,
         HistoryListProductsModel::class => HistoryListProductsPolices::class,
         ListSuppliersModel::class => PolicesListSuppliers::class,
-        ListCreditorsModel::class => PolicesListCreditors::class
+        ListCreditorsModel::class => PolicesListCreditors::class,
+        SearchArticleModel::class => SearchArticlePolices::class,
+        OrdersPendingServiceModel::class => OrdersPendingPolicies::class,
     ];
 
     /**

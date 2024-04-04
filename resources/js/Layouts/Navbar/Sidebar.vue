@@ -45,7 +45,7 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['clientes-ver clientes'])">
+                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['clientes-ver-clientes'])">
                     <a @click="toggleClientsMenu()" data-bs-toggle="collapse" href="#navbar-clients" class="nav-link " aria-controls="navbar-clients" role="button"
                         :class="{'active': $page.component.includes('Clients') }">
                         <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
@@ -55,7 +55,7 @@
                     </a>
                     <div id="navbar-clients" v-if="clientsActive" :class="{active :clientsActive}">
                         <ul class="nav ms-4">
-                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'clientes-ver clientes')"
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'clientes-ver-clientes')"
                                 :class="{'active': $page.component === 'Clients/ListClients'} ">
                                 <Link class="nav-link" :href="route('clients.listClients.index')">
                                 <span class="sidenav-normal">Lista de clientes</span>
@@ -64,7 +64,7 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['productos-ver-hitorial-productos', 'productos-ver-lista-productos','productos-buscar-producto'])">
+                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['productos-ver-hitorial-productos', 'productos-ver-lista-productos','productos-buscar-articulo'])">
                     <a @click="toggleProductsMenu()" data-bs-toggle="collapse" href="#navbar-products" class="nav-link " aria-controls="navbar-products" role="button"
                         :class="{'active': $page.component.includes('Products') }">
                         <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
@@ -90,7 +90,7 @@
                             </li>
                         </ul>
                         <ul class="nav ms-4">
-                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'productos-buscar-producto')"
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'productos-buscar-articulo')"
                                 :class="{'active': $page.component === 'Products/SearchArticle'} ">
                                 <Link class="nav-link" :href="route('products.searchArticle.index')">
                                     <span class="sidenav-normal">Buscar Artículo</span>
@@ -147,13 +147,13 @@
                     </a>
                     <div id="navbar-suppliers" v-if="suppliersActive"  :class="{active :suppliersActive}">
                         <ul class="nav ms-4">
-                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'proveedores-ver-lista-proveedor')"
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'proveedores-ver-lista-proveedores')"
                                 :class="{'active': $page.component === 'Suppliers/ListSuppliers'}">
                                 <Link class="nav-link" :href="route('suppliers.listSuppliers.index')">
                                     <span class="sidenav-normal">Lista de Proveedores</span>
                                 </Link>
                             </li>
-                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'proveedores-ver-lista-acreedor')"
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'proveedores-ver-lista-acreedores')"
                                 :class="{'active': $page.component === 'Suppliers/ListCreditors'} ">
                                 <Link class="nav-link" :href="route('suppliers.listCreditors.index')">
                                     <span class="sidenav-normal">Lista de Acreedores</span>
@@ -162,7 +162,7 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['pedidos-ver-lista-pedidos-pendientes'])">
+                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['pedidos-ver-pedidos-pendientes'])">
                     <a data-bs-toggle="collapse" href="#navbar-orders" class="nav-link " aria-controls="navbar-orders" role="button"
                        :class="{'active': $page.component.includes('Orders'), 'collapsed': !$page.component.includes('Orders')}"
                        @click="toggleOrdersMenu()">
@@ -173,7 +173,7 @@
                     </a>
                     <div id="navbar-suppliers" v-if="ordersActive"  :class="{active :ordersActive}">
                         <ul class="nav ms-4">
-                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'pedidos-ver-lista-pedidos-pendientes')"
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'pedidos-ver-pedidos-pendientes')"
                                 :class="{'active': $page.component === 'Orders/OrdersPendingService'}">
                                 <Link class="nav-link" :href="route('orders.listOrdersPendingService.index')">
                                     <span class="sidenav-normal">Pedidos pendientes por Servir</span>
