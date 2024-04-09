@@ -4,7 +4,7 @@
         <div class="sidenav-header d-flex align-items-center"> <!-- Agregamos d-flex para que los elementos se comporten como una fila y align-items-center para centrar verticalmente -->
             <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
             <a class="navbar-brand m-0 d-flex align-items-center"> <!-- Agregamos d-flex y align-items-center para alinear horizontalmente los elementos -->
-                <img src="/assets/img/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
+                <img src="/img/Logo-Home-Bed-Spain-negro.jpg" class="navbar-brand-img h-100" alt="main_logo" style="width: 100px; height: 70px;">
                 <span class="ms-1 font-weight-bold">Homebed Spain</span>
             </a>
         </div>
@@ -64,11 +64,30 @@
                         </ul>
                     </div>
                 </li>
+                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['compras-crear-escandallo','compras-crear-articulo'])">
+                    <a @click="toggleBuyMenu()" data-bs-toggle="collapse" href="#navbar-compras" class="nav-link " aria-controls="navbar-compras" role="button"
+                       :class="{'active': $page.component.includes('Buy') }">
+                        <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                            <i class="fa-solid fa-money-bill text-success text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Compras</span>
+                    </a>
+                    <div id="navbar-clients" v-if="buyActive" :class="{active :buyActive}">
+                        <ul class="nav ms-4">
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'compras-crear-articulo')"
+                                :class="{'active': $page.component === 'Buy/CreateArticle'} ">
+                                <Link class="nav-link" :href="route('scandal.create.view.article')">
+                                    <span class="sidenav-normal">Crear Articulo</span>
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['productos-ver-hitorial-productos', 'productos-ver-lista-productos','productos-buscar-articulo'])">
                     <a @click="toggleProductsMenu()" data-bs-toggle="collapse" href="#navbar-products" class="nav-link " aria-controls="navbar-products" role="button"
                         :class="{'active': $page.component.includes('Products') }">
                         <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                            <i class="ni ni-box-2 text-success text-sm opacity-10"></i>
+                            <i class="ni ni-box-2 text-sm opacity-10" style="color: #053df6"></i>
                         </div>
                         <span class="nav-link-text ms-1">Productos</span>
                     </a>
@@ -103,7 +122,7 @@
                     <a @click="toggleFamiliesMenu()" data-bs-toggle="collapse" href="#navbar-families" class="nav-link " aria-controls="navbar-families" role="button"
                        :class="{'active': $page.component.includes('Families') }">
                         <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                            <i class="fa-solid fa-clipboard text-info text-sm opacity-10"></i>
+                            <i class="fa-solid fa-clipboard text-sm opacity-10" style="color: #ff7300"></i>
                         </div>
                         <span class="nav-link-text ms-1">Familias</span>
                     </a>
@@ -113,24 +132,6 @@
                                 :class="{'active': $page.component === 'Families/ListFamilies'}">
                                 <Link class="nav-link" :href="route('families.listFamilies.index')">
                                     <span class="sidenav-normal">Lista de Familias</span>
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['apis-ver-pruebas'])">
-                    <a @click="toggleApiMenu()" data-bs-toggle="collapse" href="#navbar-api" class="nav-link " aria-controls="navbar-api" role="button"
-                        :class="{'active': $page.component.includes('Apis') }">
-                        <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                            <i class="fa fa-tower-cell text-warning text-sm opacity-10"></i>
-                        </div>
-                        <span class="nav-link-text ms-1">Api</span>
-                    </a>
-                    <div id="navbar-api" v-if="apiActive" :class="{active :apiActive}">
-                        <ul class="nav ms-4">
-                            <li class="nav-item" :class="{'active': $page.component === 'Apis/DelSol'}">
-                                <Link class="nav-link" :href="route('apis.delSol.index')">
-                                    <span class="sidenav-normal">Pruebas Api</span>
                                 </Link>
                             </li>
                         </ul>
@@ -212,10 +213,10 @@ export default {
             adminActive: false,
             clientsActive: false,
             productsActive: false,
-            apiActive: false,
             suppliersActive: false,
             familiesActive: false,
             ordersActive: false,
+            buyActive: false,
         }
     },
     methods: {
@@ -228,8 +229,8 @@ export default {
         toggleProductsMenu() {
             this.productsActive = !this.productsActive;
         },
-        toggleApiMenu() {
-            this.apiActive = !this.apiActive;
+        toggleBuyMenu() {
+            this.buyActive = !this.buyActive;
         },
         toggleSuppliersMenu() {
             this.suppliersActive = !this.suppliersActive;

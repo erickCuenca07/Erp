@@ -22,7 +22,7 @@ class MysqlListProducts implements ListProductsRepository
             })
             ->where('art.xfecha_alta', '>=', '2019-01-01')
             ->select('art.xarticulo_id', 'art.xdescripcion', 'art.xfecha_alta', 'pc.xnombre')
-            ->orderBy('art.xfecha_alta', 'asc')
+            ->orderBy('art.xfecha_alta', 'desc')
             ->get()
             ->map(fn($item) => $this->mapListProducts($item)->toArray())
             ->toArray();

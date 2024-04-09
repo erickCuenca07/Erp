@@ -33,11 +33,11 @@
             "Admin\\": "src/Hmb/Admin/",
             "Clients\\": "src/Hmb/Clients/",
             "Products\\": "src/Hmb/Products/",
-            "Api\\": "src/Hmb/Api/",
             "Suppliers\\": "src/Hmb/Suppliers/",
             "Shared\\": "src/Hmb/Shared/",
             "Families\\": "src/Hmb/Families/",
-            "Orders\\": "src/Hmb/Orders/"
+            "Orders\\": "src/Hmb/Orders/",
+            "Buy\\": "src/Hmb/Buy/"
         }
     },
     "autoload-dev": {

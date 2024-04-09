@@ -24,7 +24,7 @@ const submit = () => {
 </script>
 
 <template>
-    <div class="page-header min-vh-100" style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-basic.jpg');">
+    <div class="page-header min-vh-100" style="background-image: url('/img/Logo-Home-Bed-Spain-banner.jpg')">
         <span class="mask bg-gradient-dark opacity-6"></span>
         <div class="container">
             <div class="row justify-content-center">
