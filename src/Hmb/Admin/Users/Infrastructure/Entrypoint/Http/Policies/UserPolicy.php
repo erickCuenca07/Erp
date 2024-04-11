@@ -1,14 +1,16 @@
 <?php
 
-namespace Buy\Scandal\Infrastructure\Entrypoint\Http\Policies;
+namespace Admin\Users\Infrastructure\Entrypoint\Http\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-class ScandalPolicies
+
+class UserPolicy
 {
     use HandlesAuthorization;
+
     public function view(User $user): bool
     {
-        return $user->can('escandallo-crear-escandallo');
+        return $user->can('admin-ver usuarios');
     }
 }

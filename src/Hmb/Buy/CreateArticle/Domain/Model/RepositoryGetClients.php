@@ -1,6 +1,6 @@
 <?php
 
-namespace Buy\Scandal\Domain\Model;
+namespace Buy\CreateArticle\Domain\Model;
 
 interface RepositoryGetClients
 {

@@ -1,7 +1,7 @@
 <?php
+use Buy\CreateArticle\Domain\Model\CreateArticleModel;
+use Buy\CreateArticle\Infrastructure\Entrypoint\Http\CreateArticleController;
 use Illuminate\Support\Facades\Route;
-use Buy\Scandal\Infrastructure\Entrypoint\Http\ScandalController;
-use Buy\Scandal\Domain\Model\ScandalModel;
 
 Route::group(
     [
@@ -17,10 +17,9 @@ Route::group(
                 'prefix' => 'scandal',
             ], function () {
                 Route::group([
-                    'middleware' => ['can:view,' .ScandalModel ::class],
+                    'middleware' => ['can:view,' .CreateArticleModel ::class],
                 ], function () {
-                    Route::get('/', [ScandalController::class, 'index'])->name('scandal.index');
-                    Route::get('/createArticle', [ScandalController::class, 'createArticle'])->name('scandal.create.view.article');
+                    Route::get('/createArticle', [CreateArticleController::class, 'createArticle'])->name('scandal.create.view.article');
                 });
             });
         });

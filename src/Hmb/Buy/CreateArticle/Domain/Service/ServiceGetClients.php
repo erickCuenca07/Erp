@@ -1,8 +1,8 @@
 <?php
 
-namespace Buy\Scandal\Domain\Service;
+namespace Buy\CreateArticle\Domain\Service;
 
-use Buy\Scandal\Domain\Model\RepositoryGetClients;
+use Buy\CreateArticle\Domain\Model\RepositoryGetClients;
 
 class ServiceGetClients
 {

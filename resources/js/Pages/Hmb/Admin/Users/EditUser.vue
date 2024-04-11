@@ -6,7 +6,11 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header pb-0">
-                        <h3 class="card-title">Estas editando el usuario: <span class="text-uppercase text-primary">{{user.name}}</span></h3>
+                        <h3 class="card-title mb-0">Estás editando el usuario:
+                            <span class="text-uppercase text-primary">{{ user.name }}</span>
+                            <button class="btn btn-info ms-4" data-bs-toggle="modal" data-bs-target="#modal-create-permission" v-if="this.$permissions(this.$page.props.auth.user, 'admin-crear-permiso')">Crear Permiso</button>
+                        </h3>
+                        <CreatePermission></CreatePermission>
                     </div>
                     <hr>
                     <div class="car-body">
@@ -64,6 +68,7 @@ import { Link } from '@inertiajs/inertia-vue3'
 import Layout from '../../../../Layouts/Layout.vue';
 import TopBar from '../../../../Layouts/Navbar/Topbar.vue';
 import {toast} from "vue3-toastify";
+import CreatePermission from "@/Pages/Hmb/Admin/Components/Modals/CreatePermission.vue";
 
 const notify = ( message, type="warning") =>
     toast(message, {
@@ -74,6 +79,7 @@ const notify = ( message, type="warning") =>
 export default {
     name: "EditUser",
     components: {
+        CreatePermission,
         Layout,
         TopBar,
         Link

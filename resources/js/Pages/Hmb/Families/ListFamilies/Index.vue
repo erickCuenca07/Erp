@@ -30,9 +30,9 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="item in filteredListFamilies" :key="item.CODFAM">
-                                        <td class="text-center text-xs">{{ item.CODFAM }}</td>
-                                        <td class="text-center text-xs">{{ item.DESFAM }}</td>
+                                    <tr v-for="item in filteredListFamilies" :key="item.idFamily">
+                                        <td class="text-center text-xs">{{ item.idFamily }}</td>
+                                        <td class="text-center text-xs">{{ item.nameFamily}}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -159,8 +159,8 @@ export default {
             });
             data.forEach(item => {
                 const rowValues = [
-                    item.CODFAM,
-                    item.DESFAM
+                    item.idFamily,
+                    item.nameFamily
                 ];
                 worksheet.addRow(rowValues);
             });

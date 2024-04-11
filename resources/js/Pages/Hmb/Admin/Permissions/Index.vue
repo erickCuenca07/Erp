@@ -12,7 +12,7 @@
                         <!-- table -->
                         <div class="card-body">
                             <span>
-                                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modal-create-permission">Crear Permiso</button>
+                                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modal-create-permission" v-if="this.$permissions(this.$page.props.auth.user, 'admin-crear-permiso')">Crear Permiso</button>
                             </span>
                             <div class="table-responsive">
                                 <table class="table align-items-center table-flush">

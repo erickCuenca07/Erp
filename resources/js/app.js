@@ -9,6 +9,9 @@ import Vue3Toastify from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+import jQuery from 'jquery';
+import VueSelect  from "vue-select";
+import "vue-select/dist/vue-select.css";
 //PLUGINS
 import Permissions from './Plugins/Permissions';
 import Alerts from './Plugins/SweetAlertAndToastify.js';
@@ -26,6 +29,8 @@ createInertiaApp({
             .use(Alerts)
             .use(Vue3Toastify,{autoClose:3000})
             .use(VueSweetalert2)
+            .use(jQuery)
+            .component("v-select", VueSelect)
             .mount(el);
     },
     progress: {

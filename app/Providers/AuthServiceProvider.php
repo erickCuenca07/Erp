@@ -5,7 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Admin\Users\Domain\Model\UserModel;
-use Admin\User\Infrastructure\Entrypoint\Http\Policies\UserPolicy;
+use Admin\Users\Infrastructure\Entrypoint\Http\Policies\UserPolicy;
 use Admin\Permissions\Infrastructure\Entrypoint\Http\Policies\PermissionsPolicy;
 use Admin\Permissions\Domain\Model\PermissionsModel;
 use Clients\ListClients\Domain\Model\ListClientsModel;
@@ -24,6 +24,8 @@ use Products\SearchArticle\Domain\Model\SearchArticleModel;
 use Products\SearchArticle\Infrastructure\Entrypoint\Http\Policies\SearchArticlePolices;
 use Orders\OrdersPendingService\Domain\Model\OrdersPendingServiceModel;
 use Orders\OrdersPendingService\Infrastructure\Entrypoint\Http\Policies\OrdersPendingPolicies;
+use Buy\CreateArticle\Domain\Model\CreateArticleModel;
+use Buy\CreateArticle\Infrastructure\Entrypoint\Http\Policies\CreateArticlePolicies;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -38,6 +40,7 @@ class AuthServiceProvider extends ServiceProvider
         ListCreditorsModel::class => PolicesListCreditors::class,
         SearchArticleModel::class => SearchArticlePolices::class,
         OrdersPendingServiceModel::class => OrdersPendingPolicies::class,
+        CreateArticleModel::class => CreateArticlePolicies::class
     ];
 
     /**

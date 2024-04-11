@@ -1,8 +1,9 @@
 <?php
 
-namespace Buy\Scandal\Application\Handler;
+namespace Buy\CreateArticle\Application\Handler;
 
-use Buy\Scandal\Domain\Service\ServiceGetClients;
+use Buy\CreateArticle\Domain\Service\ServiceGetClients;
+
 class HandlerGetClients
 {
 

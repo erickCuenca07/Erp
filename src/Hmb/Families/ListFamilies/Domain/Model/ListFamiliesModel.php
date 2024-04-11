@@ -4,23 +4,23 @@ class ListFamiliesModel
 {
 
     public function __construct(
-        public readonly int $CODFAM,
-        public readonly string $DESFAM
+        public readonly int $idFamily,
+        public readonly string $nameFamily
     ){}
 
     public function toArray(): array
     {
         return [
-            'CODFAM' => $this->getCodFam(),
-            'DESFAM' => $this->getDesFam(),
+            'idFamily' => $this->getIdFamily(),
+            'nameFamily' => $this->getNameFamily(),
         ];
     }
-    public function getCodFam(): int
+    public function getIdFamily(): int
     {
-        return $this->CODFAM;
+        return $this->idFamily;
     }
-    public function getDesFam(): string
+    public function getNameFamily(): string
     {
-        return $this->DESFAM;
+        return $this->nameFamily;
     }
 }

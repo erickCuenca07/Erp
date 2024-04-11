@@ -1,16 +1,15 @@
 <?php
 
-namespace Admin\User\Infrastructure\Entrypoint\Http\Policies;
+namespace Buy\CreateArticle\Infrastructure\Entrypoint\Http\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class UserPolicy
+class CreateArticlePolicies
 {
     use HandlesAuthorization;
-
     public function view(User $user): bool
     {
-        return $user->can('admin-ver usuarios');
+        return $user->can('compras-crear-articulo');
     }
 }
