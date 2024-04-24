@@ -20,15 +20,15 @@ class ListSuppliersModel
     public function toArray(): array
     {
         return [
-            'CODPRO' => $this->getId(),
-            'NOFPRO' => $this->getName(),
-            'NIFPRO' => $this->getNif(),
-            'DOMPRO' => $this->getHome(),
-            'CPOPRO' => $this->getPostalCode(),
-            'PROPRO' => $this->getProvince(),
-            'TELPRO' => $this->getPhoneNumber(),
-            'FALPRO' => $this->getDate(),
-            'PAIPRO' => $this->getCountry()
+            'idProveedor' => $this->getId(),
+            'nombre' => $this->getName(),
+            'nif' => $this->getNif(),
+            'domicilio' => $this->getHome(),
+            'cp' => $this->getPostalCode(),
+            'provincia' => $this->getProvince(),
+            'telefono' => $this->getPhoneNumber(),
+            'fechaAlta' => $this->getDate(),
+            'pais' => $this->getCountry()
         ];
     }
     public function getId(): int

@@ -37,7 +37,8 @@
             "Shared\\": "src/Hmb/Shared/",
             "Families\\": "src/Hmb/Families/",
             "Orders\\": "src/Hmb/Orders/",
-            "Buy\\": "src/Hmb/Buy/"
+            "Buy\\": "src/Hmb/Buy/",
+            "Logistic\\": "src/Hmb/Logistic/"
         }
     },
     "autoload-dev": {

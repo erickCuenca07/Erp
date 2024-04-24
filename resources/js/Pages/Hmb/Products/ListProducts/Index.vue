@@ -21,16 +21,24 @@
                                     <tr>
                                         <th class="text-center text-uppercase text-xs">id producto</th>
                                         <th class="text-center text-uppercase text-xs">descripcion</th>
-                                        <th class="text-center text-uppercase text-xs">fecha de alta</th>
-                                        <th class="text-center text-uppercase text-xs">nombre del proveedor</th>
+                                        <th class="text-center text-uppercase text-xs">color</th>
+                                        <th class="text-center text-uppercase text-xs">medidas</th>
+                                        <th class="text-center text-uppercase text-xs">ean</th>
+                                        <th class="text-center text-uppercase text-xs">tarifa</th>
+                                        <th class="text-center text-uppercase text-xs">gama</th>
+                                        <th class="text-center text-uppercase text-xs">proveedor</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr v-for="listProduct in filteredListProducts" :key="listProduct.id">
                                         <td class="text-center text-xs">{{ listProduct.id }}</td>
                                         <td class="text-center text-xs">{{ listProduct.name }}</td>
-                                        <td class="text-center text-xs">{{ listProduct.date }}</td>
-                                        <td class="text-center text-xs">{{ listProduct.nameSupplier }}</td>
+                                        <td class="text-center text-xs">{{ listProduct.color }}</td>
+                                        <td class="text-center text-xs">{{ listProduct.measure }}</td>
+                                        <td class="text-center text-xs">{{ listProduct.ean }}</td>
+                                        <td class="text-center text-xs">{{ listProduct.tarifa }}</td>
+                                        <td class="text-center text-xs">{{ listProduct.gama }}</td>
+                                        <td class="text-center text-xs">{{ listProduct.provider }}</td>
                                     </tr>
                                     </tbody>
                                 </table>

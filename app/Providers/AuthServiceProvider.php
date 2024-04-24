@@ -26,6 +26,8 @@ use Orders\OrdersPendingService\Domain\Model\OrdersPendingServiceModel;
 use Orders\OrdersPendingService\Infrastructure\Entrypoint\Http\Policies\OrdersPendingPolicies;
 use Buy\CreateArticle\Domain\Model\CreateArticleModel;
 use Buy\CreateArticle\Infrastructure\Entrypoint\Http\Policies\CreateArticlePolicies;
+use Logistic\TransportInvoices\Domain\Model\ModelTransportInvoices;
+use Logistic\TransportInvoices\Infrastructure\Entrypoint\Http\Policies\TransportInvoicesPolicies;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -40,7 +42,8 @@ class AuthServiceProvider extends ServiceProvider
         ListCreditorsModel::class => PolicesListCreditors::class,
         SearchArticleModel::class => SearchArticlePolices::class,
         OrdersPendingServiceModel::class => OrdersPendingPolicies::class,
-        CreateArticleModel::class => CreateArticlePolicies::class
+        CreateArticleModel::class => CreateArticlePolicies::class,
+        ModelTransportInvoices::class => TransportInvoicesPolicies::class
     ];
 
     /**

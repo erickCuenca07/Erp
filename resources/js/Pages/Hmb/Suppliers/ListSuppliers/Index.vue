@@ -38,15 +38,15 @@
                                     <tbody>
                                     <template v-for="list in filteredSuppliers">
                                         <tr>
-                                            <td class="text-center text-xs"> {{ list.CODPRO }}</td>
-                                            <td class="text-center text-xs">{{ list.NOFPRO }}</td>
-                                            <td class="text-center text-xs">{{ list.NIFPRO }}</td>
-                                            <td class="text-center text-xs">{{ list.DOMPRO }}</td>
-                                            <td class="text-center text-xs">{{ list.CPOPRO }}</td>
-                                            <td class="text-center text-xs">{{ list.PROPRO }}</td>
-                                            <td class="text-center text-xs">{{ list.TELPRO }}</td>
-                                            <td class="text-center text-xs">{{ list.FALPRO }}</td>
-                                            <td class="text-center text-xs">{{ list.PAIPRO }}</td>
+                                            <td class="text-center text-xs"> {{ list.idProveedor }}</td>
+                                            <td class="text-center text-xs">{{ list.nombre }}</td>
+                                            <td class="text-center text-xs">{{ list.nif }}</td>
+                                            <td class="text-center text-xs">{{ list.domicilio }}</td>
+                                            <td class="text-center text-xs">{{ list.cp }}</td>
+                                            <td class="text-center text-xs">{{ list.provincia }}</td>
+                                            <td class="text-center text-xs">{{ list.telefono }}</td>
+                                            <td class="text-center text-xs">{{ list.fechaAlta }}</td>
+                                            <td class="text-center text-xs">{{ list.pais }}</td>
                                         </tr>
                                     </template>
                                     </tbody>

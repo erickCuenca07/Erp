@@ -14,12 +14,13 @@ Route::group(
             'verified',
         ])->group(function (){
             Route::group([
-                'prefix' => 'scandal',
+                'prefix' => 'createArticle',
             ], function () {
                 Route::group([
                     'middleware' => ['can:view,' .CreateArticleModel ::class],
                 ], function () {
-                    Route::get('/createArticle', [CreateArticleController::class, 'createArticle'])->name('scandal.create.view.article');
+                    Route::get('/createArticle', [CreateArticleController::class, 'createArticle'])->name('createArticle.index');
+                    Route::post('/searchArticle', [CreateArticleController::class, 'searchArticle'])->name('createArticle.search.article');
                 });
             });
         });

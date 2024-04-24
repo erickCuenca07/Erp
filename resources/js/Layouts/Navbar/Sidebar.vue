@@ -76,7 +76,7 @@
                         <ul class="nav ms-4">
                             <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'compras-crear-articulo')"
                                 :class="{'active': $page.component === 'Buy/CreateArticle'} ">
-                                <Link class="nav-link" :href="route('scandal.create.view.article')">
+                                <Link class="nav-link" :href="route('createArticle.index')">
                                     <span class="sidenav-normal">Crear Articulo</span>
                                 </Link>
                             </li>
@@ -183,6 +183,26 @@
                         </ul>
                     </div>
                 </li>
+                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['logistica-ver-facturas-transporte'])">
+                    <a data-bs-toggle="collapse" href="#navbar-logistic" class="nav-link " aria-controls="navbar-logistic" role="button"
+                       :class="{'active': $page.component.includes('Logistic'), 'collapsed': !$page.component.includes('Logistic')}"
+                       @click="toggleLogisticMenu()">
+                        <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                            <i class="ni ni-delivery-fast text-secondary text-sm opacity-10"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Logistica</span>
+                    </a>
+                    <div id="navbar-logistic" v-if="LogisticActive"  :class="{active :LogisticActive}">
+                        <ul class="nav ms-4">
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'logistica-ver-facturas-transporte')"
+                                :class="{'active': $page.component === 'Logistic/TransportInvoices'}">
+                                <Link class="nav-link" :href="route('logistic.transportInvoices.index')">
+                                    <span class="sidenav-normal">Facturas de Transporte</span>
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
         </div>
         <!-- Divider -->
@@ -217,6 +237,7 @@ export default {
             familiesActive: false,
             ordersActive: false,
             buyActive: false,
+            LogisticActive: false,
         }
     },
     methods: {
@@ -240,6 +261,9 @@ export default {
         },
         toggleOrdersMenu() {
             this.ordersActive = !this.ordersActive;
+        },
+        toggleLogisticMenu() {
+            this.LogisticActive = !this.LogisticActive;
         }
     }
 }

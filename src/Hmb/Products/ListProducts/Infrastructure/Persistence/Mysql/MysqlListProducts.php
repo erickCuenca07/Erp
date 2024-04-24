@@ -9,31 +9,43 @@ class MysqlListProducts implements ListProductsRepository
 {
     private string $connection = 'sqlsrv';
     private string $plProducts = 'imp.pl_articulos';
-    private string $plSuppliers = 'imp.pl_proveedores';
-    private string $pcSuppliers = 'imp.pc_proveedores';
+    private string $plProductsOpc = 'imp.pl_articulos_opc';
+    private string $colors = 'imp.ccsv_colores';
     public function search(): mixed
     {
         return DB::connection($this->connection)
             ->table($this->plProducts . ' as art')
-            ->leftJoin($this->plSuppliers . ' as pl', 'art.xproveedor_id', '=', 'pl.xproveedor_id')
-            ->leftJoin($this->pcSuppliers . ' as pc', function ($join) {
-                $join->on('pl.xproveedor_id', '=', 'pc.xproveedor_id')
-                    ->on('pl.xempresa_id', '=', 'pc.xempgen_id');
+            ->leftJoin($this->plProductsOpc . ' as artO', function ($join) {
+                $join->on('art.xarticulo_id', '=', 'artO.xarticulo_id')
+                    ->on('art.xempresa_id', '=', 'artO.xempresa_id');
+            })
+            ->join($this->colors.' as c',function ($join) {
+                $join->on('artO.xcolor_id', '=', 'c.xcolor_id')
+                    ->on('artO.xempresa_id', '=', 'c.xempresa_id');
             })
             ->where('art.xfecha_alta', '>=', '2019-01-01')
-            ->select('art.xarticulo_id', 'art.xdescripcion', 'art.xfecha_alta', 'pc.xnombre')
+            ->where('art.xempresa_id', '=', 'SM')
+            ->select('art.xarticulo_id','art.xdescripcion','art.xproveedor_id','art.xfamilia_id','c.xcolor','artO.xgama','artO.xmarca_id','artO.xmedidas','artO.xtarifa_id','artO.xupc','art.xfecha_alta','art.xusuario_alta')
+            ->distinct()
             ->orderBy('art.xfecha_alta', 'desc')
             ->get()
-            ->map(fn($item) => $this->mapListProducts($item)->toArray())
+            ->map(fn($item) => $this->mapListProducts($item))
             ->toArray();
     }
-    public function mapListProducts($item): ListProductsModel
+    public function mapListProducts($item): array
     {
-        return new ListProductsModel(
-            $item->xarticulo_id,
-            $item->xdescripcion,
-            $item->xfecha_alta,
-            $item->xnombre
-        );
+        return [
+            'id' => $item->xarticulo_id,
+            'name' => $item->xdescripcion,
+            'provider' => $item->xproveedor_id,
+            'family' => $item->xfamilia_id,
+            'color' => $item->xcolor,
+            'gama' => $item->xgama,
+            'measure' => $item->xmedidas,
+            'tarifa' => $item->xtarifa_id,
+            'ean' => $item->xupc,
+            'date' => $item->xfecha_alta,
+            'user' => $item->xusuario_alta
+        ];
     }
 }
