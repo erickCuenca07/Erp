@@ -81,6 +81,14 @@
                                 </Link>
                             </li>
                         </ul>
+                        <ul class="nav ms-4">
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'compras-crear-escandallo')"
+                                :class="{'active': $page.component === 'Buy/CreateScandal'} ">
+                                <Link class="nav-link" :href="route('createScandal.index')">
+                                    <span class="sidenav-normal">Crear Scandallo</span>
+                                </Link>
+                            </li>
+                        </ul>
                     </div>
                 </li>
                 <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['productos-ver-hitorial-productos', 'productos-ver-lista-productos','productos-buscar-articulo'])">

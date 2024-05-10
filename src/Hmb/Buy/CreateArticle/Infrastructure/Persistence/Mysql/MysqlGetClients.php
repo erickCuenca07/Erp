@@ -13,7 +13,7 @@ class MysqlGetClients implements RepositoryGetClients
     {
         return DB::connection($this->connection)
             ->table($this->clientsGroup.' as c')
-            ->select('c.idGroupCli','c.nameGroupCli')
+            ->select('c.idGroupCli','c.nameGroupCli','c.comision','c.dtoPP','c.dtoFra')
             ->get()
             ->map(fn($item) => $this->mapGetClients($item))
             ->toArray();
@@ -22,7 +22,10 @@ class MysqlGetClients implements RepositoryGetClients
     {
         return[
             'idGroupCli' => $item->idGroupCli,
-            'nameGroupCli' => $item->nameGroupCli
+            'nameGroupCli' => $item->nameGroupCli,
+            'commission' => $item->comision,
+            'dtoPP' => $item->dtoPP,
+            'dtoFra' => $item->dtoFra
         ];
     }
 }

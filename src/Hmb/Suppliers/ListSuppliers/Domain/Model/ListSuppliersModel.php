@@ -6,15 +6,15 @@ use Carbon\Carbon;
 class ListSuppliersModel
 {
     public function __construct(
-        private readonly int $id,
-        private readonly string $name,
+        private readonly int $idProveedor,
+        private readonly string $nombre,
         private readonly string $nif,
-        private readonly string $home,
-        private readonly string $postalCode,
-        private readonly string $province,
-        private readonly string $phoneNumber,
-        private readonly string $date,
-        private readonly string $country
+        private readonly string $domicilio,
+        private readonly string $cp,
+        private readonly string $provincia,
+        private readonly string $telefono,
+        private readonly string $fechaAlta,
+        private readonly string $pais
 
     ){}
     public function toArray(): array
@@ -33,11 +33,11 @@ class ListSuppliersModel
     }
     public function getId(): int
     {
-        return $this->id;
+        return $this->idProveedor;
     }
     public function getName(): string
     {
-        return $this->name;
+        return $this->nombre;
     }
     public function getNif(): string
     {
@@ -45,26 +45,26 @@ class ListSuppliersModel
     }
     public function getHome(): string
     {
-        return $this->home;
+        return $this->domicilio;
     }
     public function getPostalCode(): string
     {
-        return $this->postalCode;
+        return $this->cp;
     }
     public function getProvince(): string
     {
-        return $this->province;
+        return $this->provincia;
     }
     public function getPhoneNumber(): string
     {
-        return $this->phoneNumber;
+        return $this->telefono;
     }
     public function getDate(): string
     {
-        return $this->date;
+        return $this->fechaAlta;
     }
     public function getCountry(): string
     {
-        return $this->country;
+        return $this->pais;
     }
 }

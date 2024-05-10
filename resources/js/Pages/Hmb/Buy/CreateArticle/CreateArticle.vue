@@ -776,34 +776,16 @@ export default {
                 })
         },
           async addData() {
-              if (this.numberCreated === '') {
+              if (this.numberCreated === '' || this.numberCreated < 0 || this.numberCreated === 0) {
                   toast.warning('No se puede crear un articulo sin nº de veces a crear');
                   return
               }
+              if (this.nameArticle === '') {
+                  toast.warning('No se puede crear un articulo sin datos');
+                  return
+              }
               toast.info('Clonando Articulos... y traduciendolos');
-              this.originData.push({
-                  idArticle: this.idArticle,
-                  nameArticle: this.nameArticle,
-                  colorArticle: this.colorArticle,
-                  measureArticle: this.measureArticle,
-                  gramajeArticle: this.gramajeArticle,
-                  rellenoArticle: this.rellenoArticle,
-                  buildingArticle: this.buildingArticle,
-                  bagMeasureArticle: this.bagMeasureArticle,
-                  boxMeasureArticle: this.boxMeasureArticle,
-                  piecesBoxArticle: this.piecesBoxArticle,
-                  clientSelect: this.clientSelect,
-                  rateSelect: this.rateSelect,
-                  familySelect: this.familySelect,
-                  gamaSelect: this.gamaSelect,
-                  brandSelect: this.brandSelect,
-                  innerArticle: this.innerArticle,
-                  pesoArticle: this.pesoArticle,
-                  umvArticle: this.umvArticle,
-                  textilArticle: this.textilArticle,
-                  hangtagArticle: this.hangtagArticle,
-                  stickerArticle: this.stickerArticle,
-              });
+
               const translateName = await this.callApi(this.nameArticle);
               const translateColor = await this.callApi(this.colorArticle);
               const translateRelleno = await this.callApi(this.rellenoArticle);
@@ -884,7 +866,6 @@ export default {
                   this.dataRepeat.push(newArticle)
                   this.translateData.push(translateNewArticle)
               }
-              console.log(this.translateData)
           },
         async callApi(option) {
             let api = 'https://api.mymemory.translated.net/get?q=' + option + '&langpair=es|en';

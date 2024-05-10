@@ -28,6 +28,8 @@ use Buy\CreateArticle\Domain\Model\CreateArticleModel;
 use Buy\CreateArticle\Infrastructure\Entrypoint\Http\Policies\CreateArticlePolicies;
 use Logistic\TransportInvoices\Domain\Model\ModelTransportInvoices;
 use Logistic\TransportInvoices\Infrastructure\Entrypoint\Http\Policies\TransportInvoicesPolicies;
+use Buy\Scandal\Domain\Model\ScandalModel;
+use Buy\Scandal\Infrastructure\Entrypoint\Http\Policies\ScandalPolices;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -43,7 +45,8 @@ class AuthServiceProvider extends ServiceProvider
         SearchArticleModel::class => SearchArticlePolices::class,
         OrdersPendingServiceModel::class => OrdersPendingPolicies::class,
         CreateArticleModel::class => CreateArticlePolicies::class,
-        ModelTransportInvoices::class => TransportInvoicesPolicies::class
+        ModelTransportInvoices::class => TransportInvoicesPolicies::class,
+        ScandalModel::class => ScandalPolices::class
     ];
 
     /**
