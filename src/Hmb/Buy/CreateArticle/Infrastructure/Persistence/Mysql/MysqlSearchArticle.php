@@ -24,7 +24,7 @@ class MysqlSearchArticle implements RepositorySearchArticle
                 $join->on('artOpc.xcolor_id', '=', 'c.xcolor_id')
                     ->whereColumn('artOpc.xempresa_id', '=', 'c.xempresa_id');
             })
-           ->select('art.xdescripcion as nameArticle', 'c.xcolor as colorArticle', 'artOpc.xmedidas as measureArticle', 'artOpc.xrelleno as rellenoArticle', 'artOpc.xmaterial as buildingArticle', 'artOpc.xsizebag as bagMeasureArticle', 'artOpc.xmedidas as boxMeasureArticle', 'artOpc.xuni_caja as piecesBoxArticle', 'artOpc.xmarca_id as brandSelect', 'artOpc.xgama as gamaSelect', 'art.xfamilia_id as familySelect', 'artOpc.xtarifa_id as rateSelect', 'artOpc.xpeso_neto as pesoArticle')
+           ->select('art.xdescripcion as nameArticle','artOpc.xvolumen as cbmArticle', 'c.xcolor as colorArticle', 'artOpc.xmedidas as measureArticle', 'artOpc.xrelleno as rellenoArticle', 'artOpc.xmaterial as buildingArticle', 'artOpc.xsizebag as bagMeasureArticle', 'artOpc.xmedidas as boxMeasureArticle', 'artOpc.xuni_caja as piecesBoxArticle', 'artOpc.xmarca_id as brandSelect', 'artOpc.xgama as gamaSelect', 'art.xfamilia_id as familySelect', 'artOpc.xtarifa_id as rateSelect', 'artOpc.xpeso_neto as pesoArticle')
            ->where('art.xarticulo_id', '=', $idArticle)
            ->get()
            ->toArray();

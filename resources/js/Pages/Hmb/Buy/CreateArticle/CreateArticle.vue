@@ -20,8 +20,8 @@
                                             <th>nombre articulo</th>
                                             <th>color</th>
                                             <th>medida</th>
-                                            <th>gramaje</th>
-                                            <th>relleno</th>
+                                            <th>CBM/volumen</th>
+                                            <th>relleno/gramaje</th>
                                             <th>construccion</th>
                                             <th>med.bolsa</th>
                                             <th>med.caja</th>
@@ -45,7 +45,7 @@
                                                 <div class="row">
                                                     <div class="col-sm">
                                                         <div class="input-group">
-                                                            <input v-model="idArticle" class="form-control rounded" type="text" placeholder="Id del articulo" required @keydown.tab.prevent="searchArticle">
+                                                            <input v-model="idArticle" class="form-control rounded" type="text" placeholder="Id del articulo" required @keydown.enter.prevent="searchArticle">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -81,7 +81,7 @@
                                                 <div class="row">
                                                     <div class="col-sm">
                                                         <div class="input-group">
-                                                            <input v-model="gramajeArticle" class="form-control rounded" type="number" placeholder="gramaje del articulo" required>
+                                                            <input v-model="cbmArticle" class="form-control rounded" type="number" placeholder="cbm del articulo" required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -721,7 +721,7 @@ export default {
             nameArticle: '',
             colorArticle: '',
             measureArticle: '',
-            gramajeArticle: '',
+            cbmArticle: '',
             rellenoArticle: '',
             buildingArticle: '',
             bagMeasureArticle: '',
@@ -766,13 +766,13 @@ export default {
                     this.bagMeasureArticle = response.data[0].bagMeasureArticle;
                     this.boxMeasureArticle = response.data[0].boxMeasureArticle;
                     this.piecesBoxArticle = response.data[0].piecesBoxArticle;
+                    this.cbmArticle = response.data[0].cbmArticle;
                     this.gamaSelect = this.gama.find(gama => gama.idGama === parseInt(response.data[0].gamaSelect));
                     this.brandSelect = this.brand.find(brand => brand.idBrand === (response.data[0].brandSelect));
                     this.familySelect = this.families.find(family => family.idFamily === parseInt(response.data[0].familySelect));
                     this.rateSelect = this.rates.find(rate => rate.idRate === (response.data[0].rateSelect));
                     this.pesoArticle = response.data[0].pesoArticle;
-                    console.log(response.data)
-                    console.log(this.families);
+
                 })
         },
           async addData() {
@@ -798,7 +798,7 @@ export default {
                   nameArticle: translateName,
                   colorArticle: translateColor,
                   measureArticle: this.measureArticle,
-                  gramajeArticle: this.gramajeArticle,
+                  cbmArticle: this.cbmArticle,
                   rellenoArticle: translateRelleno,
                   buildingArticle: translateBuilding,
                   bagMeasureArticle: this.bagMeasureArticle,
@@ -822,7 +822,7 @@ export default {
                       nameArticle: this.nameArticle,
                       colorArticle: this.colorArticle,
                       measureArticle: this.measureArticle,
-                      gramajeArticle: this.gramajeArticle,
+                      cmbArticle: this.cmbArticle,
                       rellenoArticle: this.rellenoArticle,
                       buildingArticle: this.buildingArticle,
                       bagMeasureArticle: this.bagMeasureArticle,
@@ -845,7 +845,7 @@ export default {
                       nameArticle: translateName,
                       colorArticle: translateColor,
                       measureArticle: this.measureArticle,
-                      gramajeArticle: this.gramajeArticle,
+                      cbmArticle: this.cbmArticle,
                       rellenoArticle: translateRelleno,
                       buildingArticle: translateBuilding,
                       bagMeasureArticle: this.bagMeasureArticle,

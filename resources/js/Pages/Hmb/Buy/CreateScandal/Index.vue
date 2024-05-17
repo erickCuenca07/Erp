@@ -37,7 +37,7 @@
                                             <tbody>
                                             <tr>
                                                 <td> GTS.ADIC</td>
-                                                <td> <input type="number" required class="form-control rounded" placeholder="GTS.ADIC"></td>
+                                                <td> <input type="number" v-model="this.additionalCosts" required class="form-control rounded" placeholder="GTS.ADIC"></td>
                                             </tr>
                                             <tr>
                                                 <td> IMP.EUR</td>
@@ -79,15 +79,37 @@
                             </div>
                             <div class="row" style="padding-top: 20px">
                                 <div class="col-md-6">
-                                    <div class="input-group">
+                                    <div class="input-group" >
                                         <span class="input-group-text">o.date</span>
                                         <input type="date" required class="form-control rounded" v-model="dateDay">
                                         <span class="input-group-text">DEADLINE</span>
                                         <input type="number" required class="form-control rounded">
                                         <span class="input-group-text">ETD</span>
-                                        <input type="date" required class="form-control rounded">
+                                        <input type="date" required class="form-control rounded" v-model="this.etd" @change="updateETA">
                                         <span class="input-group-text">ETA</span>
-                                        <input type="date" required class="form-control rounded">
+                                        <input type="date" required class="form-control rounded" v-model="this.eta">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="table-responsive">
+                                        <table class="tablet table-bordered" id="table">
+                                            <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th class="text-center text-xs">TARIFA</th>
+                                                <th class="text-center text-xs">PRECIO 1</th>
+                                                <th class="text-center text-xs">PRECIO 2</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td> %M.B</td>
+                                                <td class="text-center text-xs">{{this.calculateRate}}</td>
+                                                <td class="text-center text-xs">{{this.calculatePrice1}}</td>
+                                                <td class="text-center text-xs">{{this.calculatePrice2}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                                 <div class="col-md-1">
@@ -109,7 +131,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="table-responsive" style="padding-top: 20px">
-                                        <table class="tablet table-bordered table-striped table-striped-columns" id="table">
+                                        <table class="tablet table-bordered table-striped table-striped-columns">
                                             <thead>
                                             <tr>
                                                 <th rowspan="2" class="text-center text-xs">Referencia</th>
@@ -310,7 +332,7 @@
                                                         {{ additionalData[index] ? additionalData[index].clientSelect2.dtoPP : '' }} %
                                                     </td>
                                                     <td class="text-center">
-                                                        %
+                                                       {{additionalData[index] ? additionalData[index].clientSelect2.dtoFra : ''}} %
                                                     </td>
                                                 </tr>
                                             </template>
@@ -406,6 +428,7 @@ import TopBar from '../../../../Layouts/Navbar/Topbar.vue';
 import {toast} from "vue3-toastify";
 import jsPDF from "jspdf";
 import autoTable from 'jspdf-autotable';
+import $ from 'jquery';
 export default {
     name: "Index Scandal",
     components: {
@@ -437,7 +460,7 @@ export default {
             selectPayment: '',
             selectPort: '',
             dateDay: new Date().toISOString().substr(0, 10),
-            idArticle: '',
+            idArticle: '5024761001',
             nameArticle: '',
             colorArticle: '',
             measureArticle: '',
@@ -458,7 +481,7 @@ export default {
             arancelTotal:0,
             weightArticle:0,
             additionalRows:3,
-            additionalIds: [],
+            additionalIds: ['5024761001','5024761001','5024761001'],
             additionalData: [],
             originalWeight: 0,
             totalImport: 0,
@@ -482,6 +505,12 @@ export default {
             priceMinimo:0,
             cv:0.0935,
             mc:0.2396,
+            additionalCosts:0,
+            calculateRate:0,
+            calculatePrice1:0,
+            calculatePrice2:0,
+            etd:null,
+            eta:null,
         }
     },
     watch: {
@@ -517,27 +546,142 @@ export default {
     },
     methods: {
         printPage: async function() {
-            const doc = new jsPDF({
-                orientation: "landscape",
-            });
+            const doc = new jsPDF('l', 'pt', 'a4');
             const data = [
-                ['Supplier', this.nameSupplier],
+                ['Supplier', this.idSupplier + ' - ' + this.nameSupplier],
                 ['Order', this.numOrder],
                 ['Date', this.dateDay],
                 ['Dolar Coin', '$' + this.dolarCoin],
                 ['Asegurar', 'si'],
-                ['Container', this.containerSelect],
-                ['INCOTERMS', this.selectPayment],
-                ['Port', this.selectPort]
+                ['Container', this.containerSelect.idContainer],
+                ['INCOTERMS', this.selectPayment.id],
+                ['Port', this.selectPort.id]
             ];
-            autoTable(doc, {
-                    head: [['Name', 'Email', 'Country']],
-                    body: [
-                        ['David', 'david@example.com', 'Sweden'],
-                        ['Castille', 'castille@example.com', 'Spain'],
-                    ],
+            doc.autoTable({
+                startY: 20,
+                startX:20,
+                head: false,
+                body: data,
+                styles: {
+                    cellPadding: 2, // Reducir el espaciado entre celdas
+                    cellWidth: 115, // Reducir el ancho de las celdas
+                },
+                margin: { left: 20 } // Margen izquierdo para la primera tabla
             })
-            doc.save('a4.pdf');
+            // Tabla 2: Otros datos
+            const otherData = [
+                ['GTS.ADIC', this.additionalCosts],
+                ['IMP.EUR', this.impEur],
+                ['Flete', this.selectPort ? this.containerSelect.priceContainer + ' €' : ''],
+                ['Arancel', this.arancelTotal],
+                ['Seguro', this.sure],
+                ['fob', this.fob],
+                ['comi.com', '0,00 €'],
+                ['TOTAL', this.allTotales + ' €']
+            ];
+            doc.autoTable({
+                startY: 20, // Misma altura de inicio que la primera tabla
+                head: false,
+                body: otherData,
+                styles: {
+                    fontSize: 10, // Reducir el tamaño de la fuente
+                    cellPadding: 2, // Reducir el espaciado entre celdas
+                    cellWidth: 63, // Ancho de las celdas
+                    lineHeight: 10 // Reducir el interlineado
+                },
+                margin: { left: 300 }
+            });
+            doc.autoTable({
+                startY: 20, // Misma altura de inicio que la primera tabla
+                html: '#table',
+                styles: {
+                    fontSize: 8, // Reducir el tamaño de la fuente
+                    cellPadding: 2, // Reducir el espaciado entre celdas
+                    cellWidth: 63, // Ancho de las celdas
+                    lineHeight: 10, // Reducir el interlineado
+                    valign: 'middle', // Centrar verticalmente el contenido de las celdas
+                    halign: 'center' // Centrar horizontalmente el contenido de las celdas
+                },
+                margin: { left: 500 }
+            })
+            doc.autoTable({
+                startY: 60, // Misma altura de inicio que la primera tabla
+                head:[
+                  ['O.Date', 'DEADLINE', 'ETD', 'ETA']
+                ],
+                body: [
+                    [this.dateDay, , this.etd, this.eta]
+                ],
+                styles: {
+                    fontSize: 8, // Reducir el tamaño de la fuente
+                    cellPadding: 2, // Reducir el espaciado entre celdas
+                    cellWidth: 63, // Ancho de las celdas
+                    lineHeight: 10, // Reducir el interlineado
+                    valign: 'middle', // Centrar verticalmente el contenido de las celdas
+                    halign: 'center' // Centrar horizontalmente el contenido de las celdas
+                },
+                margin: { left: 500 }
+            })
+            doc.autoTable({
+                startY: 100,
+                head: [
+                    ['T.Peso','T.CBM','T.Cajas','T.Pcs','T.Importe']
+                ],
+                body:[
+                    [this.calculateWeightTotal, this.calculateCbmTotal, this.calculateBoxTotal, this.calculatePcsTotal, this.totalImport]
+                ],
+                styles: {
+                    fontSize: 8, // Reducir el tamaño de la fuente
+                    cellPadding: 2, // Reducir el espaciado entre celdas
+                    cellWidth: 63, // Ancho de las celdas
+                    lineHeight: 10, // Reducir el interlineado
+                    valign: 'middle', // Centrar verticalmente el contenido de las celdas
+                    halign: 'center' // Centrar horizontalmente el contenido de las celdas
+                },
+                margin: { left: 500 }
+            })
+            //tabla 3: articulos
+             const rows = this.additionalData.map(item =>[item.idArticle, item.nameArticle, item.measureArticle, item.colorArticle, item.price, item.brandArticle, item.priceInventory, item.weightArticle,
+                parseFloat(item.cbm).toFixed(2), parseFloat(item.totalCbm).toFixed(2), item.unitBox, item.totalBox, item.totalPcs, parseFloat(item.import).toFixed(2), item.arancel,item.tariffArticle,item.priceTariff,item.margenBruto,item.clientSelect2.nameGroupCli,item.clientSelect2.commission,item.clientSelect2.dtoPP,item.clientSelect2.dtoFra,item.price1,item.margenBruto2,item.price2,item.margenBruto3,item.priceTecnico,item.priceMinimo
+            ]);
+             let fixedImport = parseFloat(this.import).toFixed(2);
+             let fixedCbm = parseFloat(this.totalCbm).toFixed(2);
+             rows.unshift([this.idArticle, this.nameArticle, this.measureArticle, this.colorArticle, this.price, this.brandArticle, this.priceInventory, this.weightArticle, parseFloat(this.cbm).toFixed(2), fixedCbm,
+                 this.unitBox, this.totalBox, this.totalPcs, fixedImport, this.arancel,this.tariffArticle,this.priceTariff,this.margenBruto,this.clientSelect.nameGroupCli,this.commission,this.dtoPP,this.dtoFra,this.price1,this.margenBruto2,this.price2,this.margenBruto3,this.priceTecnico,this.priceMinimo
+             ]);
+            doc.autoTable({
+                startY: 200,
+                theme: 'grid',
+                head:[
+                       ['Referencia','Nombre','Medidas','Color','Pre.Costo','Marca','Pre.Invent','Peso','CBM','Total CBM','PCS','Total Cajas','Total PCS','Importe','Arancel','Tarifa','Pre.Tarifa','MB','Cliente','Comision','Dto PP','Dto FR','Precio 1','MB','Precio 2','MB','Prec.Tecnico','Prec.Minimo']
+                ],
+                body: rows,
+                styles: {
+                    fontSize: 6, // Tamaño de fuente global
+                    lineHeight: 8, // Reducir espacio entre líneas
+                    cellPadding: 2, // Reducir el espaciado entre celdas
+                    valign: 'middle', // Centrar verticalmente el contenido de las celdas
+                    halign: 'center' // Centrar horizontalmente el contenido de las celdas
+                },
+
+                margin: { left: 20 },
+            });
+            const currentDate = new Date();
+            const currentHour = currentDate.getHours();
+            const currentMinute = currentDate.getMinutes();
+            const totalPages = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= totalPages; i++) {
+                doc.setPage(i);
+                doc.setFontSize(10);
+                const pageNumberText = `Página ${i} de ${totalPages}`; // Texto del número de página
+                const pageNumberWidth = doc.getStringUnitWidth(pageNumberText) * doc.internal.getFontSize(); // Ancho del texto del número de página
+                const footerText = `Esc. ${this.scandalCounter.escandallo}`; // Texto del pie de página
+                const footerX = doc.internal.pageSize.getWidth() - 20 - pageNumberWidth; // Posición X del texto del pie de página
+                doc.text(footerText, 20, doc.internal.pageSize.getHeight() - 10); // Texto del pie de página a la izquierda
+                doc.text(pageNumberText, footerX, doc.internal.pageSize.getHeight() - 10); // Número de página a la derecha
+            }
+            const fileName = `Escandallo-${this.scandalCounter.escandallo}+${this.dateDay}+${currentHour}_${currentMinute}.pdf`;
+            doc.save(fileName);
         },
         searchSupplier() {
             toast('Buscando proveedor...');
@@ -747,6 +891,8 @@ export default {
             this.calculateMargenBruto();
             this.calculateMargenAdditional();
             this.allTotales = (parseFloat(this.impEur) + parseFloat(this.containerSelect.priceContainer) + parseFloat(this.arancelTotal) + parseFloat(this.sure) + parseFloat(this.fob)).toFixed(2)
+            let calculate = (this.totalImport *  (this.margenBruto / 100)) / this.totalImport;
+            this.calculateRate = (calculate * 100).toFixed(2)
         },
         duplicateRow(index){
             const originalData = this.additionalData[index];
@@ -811,12 +957,16 @@ export default {
             if (idInput === 'main') {
                 let priceSale = this.price1 - (this.price1 * (this.dtoPP / 100)) - (this.price1 * (this.dtoFra / 100));
                 let margenBruto = ((priceSale - this.priceInventory) / priceSale) * 100;
-                return this.margenBruto2 = margenBruto.toFixed(2);
+                this.margenBruto2 = margenBruto.toFixed(2);
+                let calculate = (this.totalImport *  (this.margenBruto2 / 100)) / this.totalImport;
+                this.calculatePrice1 = (calculate * 100).toFixed(2)
             }else{
                 for (const item of this.additionalData){
                     let priceSale = item.price1 - ((item.clientSelect2.dtoPP / 100) * item.priceTariff) - ((item.clientSelect2.dtoFra / 100) * item.price1)
                     let margenBrutoPercent = ((parseFloat(priceSale).toFixed(2) - item.priceInventory) / parseFloat(priceSale).toFixed(2)) * 100;
                     item.margenBruto2 = margenBrutoPercent.toFixed(2);
+                    let calculate = (this.totalImport *  (item.margenBruto2 / 100)) / this.totalImport;
+                    this.calculatePrice1 = (calculate * 100).toFixed(2)
                 }
             }
         },
@@ -824,12 +974,16 @@ export default {
             if (idInput === 'main') {
                 let priceSale = this.price2 - (this.price2 * (this.dtoPP / 100)) - (this.price2 * (this.dtoFra / 100));
                 let margenBruto = ((priceSale - this.priceInventory) / priceSale) * 100;
-                return this.margenBruto3 = margenBruto.toFixed(2);
+                this.margenBruto3 = margenBruto.toFixed(2);
+                let calculate = (this.totalImport *  (this.margenBruto3 / 100)) / this.totalImport;
+                this.calculatePrice2 = (calculate * 100).toFixed(2)
             }else{
                 for (const item of this.additionalData){
                     let priceSale = item.price2 - ((item.clientSelect2.dtoPP / 100) * item.priceTariff) - ((item.clientSelect2.dtoFra / 100) * item.price2)
                     let margenBrutoPercent = ((parseFloat(priceSale).toFixed(2) - item.priceInventory) / parseFloat(priceSale).toFixed(2)) * 100;
                     item.margenBruto3 = margenBrutoPercent.toFixed(2);
+                    let calculate = (this.totalImport *  (item.margenBruto3 / 100)) / this.totalImport;
+                    this.calculatePrice2 = (calculate * 100).toFixed(2)
                 }
             }
         },
@@ -861,6 +1015,13 @@ export default {
                     let priceTariff = priceSale / (1 - (parseFloat(item.clientSelect2.dtoPP) / 100) - (parseFloat(item.clientSelect2.dtoFra) / 100));
                     item.price2 = priceTariff.toFixed(2);
                 }
+            }
+        },
+        updateETA() {
+            if (this.etd) {
+                const etd = new Date(this.etd);
+                const eta = new Date(etd.getTime() + (110 * 24 * 60 * 60 * 1000)); // Suma 110 días en milisegundos
+                this.eta = eta.toISOString().substr(0, 10);
             }
         }
     },
