@@ -30,12 +30,10 @@ class RolesSeeder extends Seeder
                 $adminEditUsers = Permission::create(['name' => 'admin-editar usuarios']);
                 $adminSeePermission = Permission::create(['name' => 'admin-ver permisos']);
                 $adminEditPermission = Permission::create(['name' => 'admin-editar permisos']);
-        
-                $admin->syncPermissions([
-                    $adminSeeUsers,
-                    $adminEditUsers,
-                    $adminSeePermission,
-                    $adminEditPermission,
-                ]);
+
+                $admin->syncPermissions($adminSeeUsers);
+                $admin->syncPermissions($adminEditUsers);
+                $admin->syncPermissions($adminSeePermission);
+                $admin->syncPermissions($adminEditPermission);
     }
 }

@@ -46,14 +46,19 @@
                     </div>
                   </a>
                 </li>
+                <li class="nav-item w-100">
+                      <Link :href="route('logout')" method="post" class="dropdown-item" as="button">
+                        <i class="ni ni-user-run"></i>
+                        <span>Cerrar Sesión</span>
+                      </Link>
+                    </li>
               </ul>
             </li>
-            <li class="nav-item px-3 d-flex align-items-center">
+            <!--<li class="nav-item px-3 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-white p-0">
                 <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
               </a>
-            </li>
-            
+            </li>-->
           </ul>
         </div>
       </div>
@@ -64,7 +69,6 @@
 import { Link } from "@inertiajs/inertia-vue3";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
-import {router} from "@inertiajs/vue3";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 
 export default {
