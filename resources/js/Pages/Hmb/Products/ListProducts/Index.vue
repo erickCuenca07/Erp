@@ -6,64 +6,51 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header pb-0">
-                            <h3>Hemos vendido alrededor de: {{ totalListProducts() }}</h3><br>
+                            <h3>Tenemos {{ totalListProducts() }} productos.</h3><br>
                         </div>
                         <hr>
-                        <!-- card body -->
-                        <div class="card-footer py-4">
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination justify-content-end mb-0">
-                                    <li class="page-item">
-                                        <a class="page-link" @click.prevent="fetchPage(getPageUrl(1))" href="#">Primera</a>
-                                    </li>
-                                    <li v-if="listProducts.prev_page_url" class="page-item">
-                                        <a class="page-link" @click.prevent="fetchPage(listProducts.prev_page_url)" href="#">
-                                            <span class="ni ni-bold-left"></span>
-                                        </a>
-                                    </li>
-                                    <template v-for="page in displayedPages" :key="page">
-                                        <li  class="page-item">
-                                            <a class="page-link" @click.prevent="fetchPage(getPageUrl(page))" href="#">{{ page }}</a>
-                                        </li>
-                                    </template>
-                                    <li v-if="listProducts.next_page_url" class="page-item">
-                                        <a class="page-link"  @click.prevent="fetchPage(listProducts.next_page_url)" href="#">
-                                            <span class="ni ni-bold-right"></span></a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" @click.prevent="fetchPage(listProducts.last_page_url)" href="#">Última</a>
-                                    </li>
-                                </ul>
-                            </nav>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Buscador</span>
+                            <input autofocus v-model.trim="searchTerm" type="text" class="form-control rounded" placeholder="Introduce el id o el nombre del producto">
                         </div>
+                        <!-- card body -->
                         <div class="car-body pt-0">
                             <div class="table-responsive">
                                 <table class="table align-items-center table-flush" id="datatable-search">
                                     <thead class="thead-light">
                                     <tr>
-                                        <th class="text-center text-uppercase text-xxs">numero de documento</th>
-                                        <th class="text-center text-uppercase text-xxs">articulo id</th>
-                                        <th class="text-center text-uppercase text-xxs">nombre del articulo</th>
-                                        <th class="text-center text-uppercase text-xxs">fecha dado de alta</th>
-                                        <th class="text-center text-uppercase text-xxs">fecha del pedido </th>
-                                        <th class="text-center text-uppercase text-xxs">fecha de entrega</th>
-                                        <th class="text-center text-uppercase text-xxs">cantidad servida</th>
+                                        <th class="text-center text-uppercase text-xs">id producto</th>
+                                        <th class="text-center text-uppercase text-xs">descripcion</th>
+                                        <th class="text-center text-uppercase text-xs">color</th>
+                                        <th class="text-center text-uppercase text-xs">medidas</th>
+                                        <th class="text-center text-uppercase text-xs">ean</th>
+                                        <th class="text-center text-uppercase text-xs">tarifa</th>
+                                        <th class="text-center text-uppercase text-xs">gama</th>
+                                        <th class="text-center text-uppercase text-xs">proveedor</th>
+                                        <th class="text-center text-uppercase text-xs">Acciones</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="listProduct in listProducts.data" :key="listProduct.id">
-                                        <td class="text-center text-xxs">{{ listProduct.idOrder }}</td>
-                                        <td class="text-center text-xxs">{{ listProduct.idArticle }}</td>
-                                        <td class="text-center text-xxs">{{ listProduct.nameArticle }}</td>
-                                        <td class="text-center text-xxs">{{ listProduct.dateUp }}</td>
-                                        <td class="text-center text-xxs">{{ listProduct.orderDate }}</td>
-                                        <td class="text-center text-xxs">{{ listProduct.deliveryDate }}</td>
-                                        <td class="text-center text-xxs">{{ listProduct.quantity }}</td>
+                                    <tr v-for="listProduct in filteredListProducts" :key="listProduct.id">
+                                        <td class="text-center text-xs">{{ listProduct.id }}</td>
+                                        <td class="text-center text-xs">{{ listProduct.name }}</td>
+                                        <td class="text-center text-xs">{{ listProduct.color }}</td>
+                                        <td class="text-center text-xs">{{ listProduct.measure }}</td>
+                                        <td class="text-center text-xs">{{ listProduct.ean }}</td>
+                                        <td class="text-center text-xs">{{ listProduct.tarifa }}</td>
+                                        <td class="text-center text-xs">{{ listProduct.gama }} | {{listProduct.nameGama}}</td>
+                                        <td class="text-center text-xs">{{ listProduct.provider }}</td>
+                                        <td class="text-center text-xs">
+                                           <Link :href="route('products.listProducts.editProducts', listProduct.id)" class="btn btn-primary btn-sm"><i class="fa-solid fa-pen-to-square"></i></Link>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+                        <button class="back-to-top" :class="{ 'show': showBackToTopButton }" @click="scrollToTop">
+                            <i class="fa-solid fa-circle-up"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -85,7 +72,7 @@ export default {
         Link,
     },
     props: {
-        listProducts: Object
+        listProducts: Array
     },
     data() {
         return {
@@ -96,41 +83,81 @@ export default {
                     url: null
                 }
             },
+            searchTerm: '',
+            showBackToTopButton: false,
         }
     },
     computed: {
-        displayedPages() {
-            const currentPage = this.listProducts.current_page;
-            const totalPages = Math.ceil(this.listProducts.total / this.listProducts.per_page);
-            const pagesToShow = 5;
-            let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
-            let endPage = Math.min(totalPages, startPage + pagesToShow - 1);
-            if (endPage - startPage + 1 < pagesToShow) {
-                startPage = Math.max(1, endPage - pagesToShow + 1);
+        filteredListProducts() {
+            if (!this.searchTerm.trim()) {
+                return this.listProducts
             }
-            return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
-        },
-
+            const searchTerm = this.searchTerm.trim().toLowerCase();
+            return this.listProducts.filter(Product => {
+                return Object.values(Product).some(valueObj => {
+                    if (typeof valueObj === 'string') {
+                        return valueObj.toLowerCase().includes(searchTerm);
+                    }
+                    // Verificar si el valor es un número y convertirlo a cadena
+                    if (typeof valueObj === 'number') {
+                        return valueObj.toString().includes(searchTerm);
+                    }
+                    // Si el valor no es una cadena ni un número, no se puede buscar
+                    return false;
+                })
+            });
+        }
     },
     methods: {
+        editArticle(id){
+          const data ={
+              id:id
+          }
+          axios.post(route('products.listProducts.editProducts'), data)
+        },
         totalListProducts() {
-            return this.listProducts.total;
+            return this.listProducts.length;
         },
-        async fetchPage(url) {
-            try {
-                const response = await this.$inertia.get(url);
-                if (response !== undefined) {
-                    this.$props.listProducts = response.data.listProducts;
-                } else {
-                    console.error("Error: La respuesta del servidor es undefined");
-                }
-            } catch (error) {
-                console.error("Error al obtener los datos de la página:", error);
-            }
+        scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
         },
-        getPageUrl(pageNumber) {
-            return this.listProducts.path + '?page=' + pageNumber;
-        }
+        handleScroll() {
+            const scrollThreshold = 100; // Puedes ajustar este valor según tus necesidades
+            this.showBackToTopButton = window.scrollY > scrollThreshold;
+        },
+    },
+    mounted() {
+        window.addEventListener('scroll', this.handleScroll);
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.handleScroll);
     },
 }
 </script>
+<style scoped>
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px; /* Ancho */
+    height: 50px; /* Altura */
+    font-size: 24px;
+    cursor: pointer;
+    background-color: #007bff; /* Color de fondo */
+    color: #fff; /* Color del texto */
+    border: none;
+    border-radius: 50%; /* Forma circular */
+    z-index: 9999;
+    transition: opacity 0.3s; /* Transición de opacidad */
+    opacity: 0; /* Inicialmente oculto */
+}
+.back-to-top:hover {
+    background-color: #0069d9; /* Color de fondo al pasar el cursor */
+}
+.back-to-top.show {
+    opacity: 1; /* Mostrar el botón cuando tiene la clase 'show' */
+}
+</style>

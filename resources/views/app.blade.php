@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/apple-icon.png">
-        <link rel="icon" type="image/png" href="/assets/img/favicon.png">
+        <link rel="icon" type="image/png" href="/img/Logo-Home-Bed-Spain-negro.jpg">
         <title> HomeBed Spain</title>
 
         <!-- Fonts -->
@@ -54,7 +54,7 @@
                 Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
             }
         </script>
-
+        <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script>
         <!-- Github buttons -->
         <script async defer src="https://buttons.github.io/buttons.js"></script>
         <script src="/assets/js/argon-dashboard.min.js?v=2.0.5"></script>

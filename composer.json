@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "ext-sqlsrv": "*",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.8",
         "laravel/framework": "^10.10",
@@ -32,8 +33,12 @@
             "Admin\\": "src/Hmb/Admin/",
             "Clients\\": "src/Hmb/Clients/",
             "Products\\": "src/Hmb/Products/",
-            "Api\\": "src/Hmb/Api/",
-            "Suppliers\\": "src/Hmb/Suppliers/"
+            "Suppliers\\": "src/Hmb/Suppliers/",
+            "Shared\\": "src/Hmb/Shared/",
+            "Families\\": "src/Hmb/Families/",
+            "Orders\\": "src/Hmb/Orders/",
+            "Buy\\": "src/Hmb/Buy/",
+            "Logistic\\": "src/Hmb/Logistic/"
         }
     },
     "autoload-dev": {

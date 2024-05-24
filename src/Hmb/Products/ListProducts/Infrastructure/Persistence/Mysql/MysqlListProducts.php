@@ -1,32 +1,56 @@
 <?php
+
 namespace Products\ListProducts\Infrastructure\Persistence\Mysql;
+
 use Illuminate\Support\Facades\DB;
 use Products\ListProducts\Domain\Model\ListProductsModel;
-use Products\ListProducts\Domain\Model\SearchListProductsRepository;
-class MysqlListProducts implements SearchListProductsRepository
+use Products\ListProducts\Domain\Model\ListProductsRepository;
+class MysqlListProducts implements ListProductsRepository
 {
-    private string $connection = 'dbServer';
+    private string $connection = 'sqlsrv';
     private string $plProducts = 'imp.pl_articulos';
-    private string $plHPedCliCab = 'imp.pl_hpedcli_cab';
-    private string $plHPedCliLin = 'imp.pl_hpedcli_lin';
+    private string $plProductsOpc = 'imp.pl_articulos_opc';
+    private string $colors = 'imp.ccsv_colores';
+    private string $gamas = 'imp.sm_gamas';
     public function search(): mixed
     {
         return DB::connection($this->connection)
-            ->table('imp.pl_hpedcli_lin as hl')
-            ->select('hc.xnumdoc_id as idOrder', 'art.xarticulo_id as idArticle', 'art.xdescripcion as nameArticle', 'art.xfecha_alta as dateUp', 'hc.xfecha_pedido as orderDate', 'hc.xfecha_entrega as deliveryDate', 'hl.xcant_ser as quantity')
-            ->leftJoin('imp.pl_hpedcli_cab as hc', function($join) {
-                $join->on('hl.xempresa_id', '=', 'hc.xempresa_id')
-                    ->on('hl.xtipodoc_id', '=', 'hc.xtipodoc_id')
-                    ->on('hl.xnumdoc_id', '=', 'hc.xnumdoc_id');
+            ->table($this->plProducts . ' as art')
+            ->leftJoin($this->plProductsOpc . ' as artO', function ($join) {
+                $join->on('art.xarticulo_id', '=', 'artO.xarticulo_id')
+                    ->on('art.xempresa_id', '=', 'artO.xempresa_id');
             })
-            ->leftJoin('imp.pl_articulos as art', 'hl.xarticulo_id', '=', 'art.xarticulo_id')
-            ->where('hc.xfecha_pedido', '>=', '2019-01-01')
-            ->where(function ($query) {
-                $query->whereNotNull('hl.xcant_ser')
-                    ->where('hl.xcant_ser', '!=', 0);
+            ->join($this->colors.' as c',function ($join) {
+                $join->on('artO.xcolor_id', '=', 'c.xcolor_id')
+                    ->on('artO.xempresa_id', '=', 'c.xempresa_id');
             })
-            ->orderByDesc('hc.xfecha_pedido')
-            ->orderBy('art.xfecha_alta')
-            ->paginate(4000);
+            ->join($this->gamas.' as g',function ($join) {
+                $join->on('artO.xgama', '=', 'g.xgama_id');
+            })
+            ->where('art.xfecha_alta', '>=', '2019-01-01')
+            ->where('art.xempresa_id', '=', 'SM')
+            ->select('art.xarticulo_id','art.xdescripcion','art.xproveedor_id','art.xfamilia_id','c.xcolor','artO.xgama','g.xgama as nameGama','artO.xmarca_id','artO.xmedidas','artO.xtarifa_id','artO.xupc','art.xfecha_alta','art.xusuario_alta')
+            ->distinct()
+            ->orderBy('art.xfecha_alta', 'desc')
+            ->get()
+            ->map(fn($item) => $this->mapListProducts($item))
+            ->toArray();
+    }
+    public function mapListProducts($item): array
+    {
+        return [
+            'id' => $item->xarticulo_id,
+            'name' => $item->xdescripcion,
+            'provider' => $item->xproveedor_id,
+            'family' => $item->xfamilia_id,
+            'color' => $item->xcolor,
+            'gama' => $item->xgama,
+            'nameGama' => $item->nameGama,
+            'measure' => $item->xmedidas,
+            'tarifa' => $item->xtarifa_id,
+            'ean' => $item->xupc,
+            'date' => $item->xfecha_alta,
+            'user' => $item->xusuario_alta
+        ];
     }
 }

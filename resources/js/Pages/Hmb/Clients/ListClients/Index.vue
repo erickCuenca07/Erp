@@ -34,6 +34,9 @@
                            </table>
                        </div>
                    </div>
+                   <button class="back-to-top" :class="{ 'show': showBackToTopButton }" @click="scrollToTop">
+                       <i class="fa-solid fa-circle-up"></i>
+                   </button>
                </div>
             </div>
         </div>
@@ -79,12 +82,53 @@ export default {
         }
       },
         search: '',
+        showBackToTopButton: false,
     }
   },
     methods: {
       totalListClients() {
         return this.listClients.length
       },
+        scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        },
+        handleScroll() {
+            const scrollThreshold = 100; // Puedes ajustar este valor según tus necesidades
+            this.showBackToTopButton = window.scrollY > scrollThreshold;
+        },
+    },
+    mounted() {
+        window.addEventListener('scroll', this.handleScroll);
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.handleScroll);
     },
 }
 </script>
+<style scoped>
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px; /* Ancho */
+    height: 50px; /* Altura */
+    font-size: 24px;
+    cursor: pointer;
+    background-color: #007bff; /* Color de fondo */
+    color: #fff; /* Color del texto */
+    border: none;
+    border-radius: 50%; /* Forma circular */
+    z-index: 9999;
+    transition: opacity 0.3s; /* Transición de opacidad */
+    opacity: 0; /* Inicialmente oculto */
+}
+.back-to-top:hover {
+    background-color: #0069d9; /* Color de fondo al pasar el cursor */
+}
+.back-to-top.show {
+    opacity: 1; /* Mostrar el botón cuando tiene la clase 'show' */
+}
+</style>

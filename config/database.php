@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlsrv'),
+    'default' => env('DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -48,8 +48,8 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
+            'database' => env('DB_DATABASE', 'bd_prueba'),
+            'username' => env('DB_USERNAME', 'root'),
             'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
@@ -61,16 +61,6 @@ return [
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
-        ],
-        'dbServer'=>[
-            'driver' => 'sqlsrv',
-            'host' => env('DB_SERVE_HOST'),
-            'database' => env('DB_SERVE_DATABASE'),
-            'username' => env('DB_SERVE_USERNAME'),
-            'password' => env('DB_SERVE_PASSWORD'),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'prefix_indexes' => true
         ],
         'pgsql' => [
             'driver' => 'pgsql',
@@ -85,6 +75,20 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => 'prefer',
+        ],
+        'sqlsrv' => [
+            'driver' => 'sqlsrv',
+           // 'url' => env('DATABASE_URL'),
+            'host' => env('DB_SERVE_HOST'),
+            'database' => env('DB_SERVE_DATABASE'),
+            'username' => env('DB_SERVE_USERNAME'),
+            'password' => env('DB_SERVE_PASSWORD'),
+            'port' => env('DB_SERVE_PORT', '1433'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            // 'encrypt' => env('DB_ENCRYPT', 'yes'),
+            // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
     ],
 

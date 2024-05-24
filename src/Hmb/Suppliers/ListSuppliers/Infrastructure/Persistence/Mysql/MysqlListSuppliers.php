@@ -6,30 +6,30 @@ use Suppliers\ListSuppliers\Domain\Model\ListSuppliersModel;
 use Suppliers\ListSuppliers\Domain\Model\ListSuppliersRepository;
 class MysqlListSuppliers implements ListSuppliersRepository
 {
-    private string $connection = 'dbServer';
-    private string $plSuppliers = 'imp.pl_proveedores';
-    private string $pcSuppliers = 'imp.pc_proveedores';
-    private string $plArticles = 'imp.pl_articulos';
-    public function search(): mixed
+    private string $connection = 'mysql';
+    private string $suppliers = 'proveedores';
+    public function search(): array
     {
         return DB::connection($this->connection)
-            ->table($this->pcSuppliers.' as pc')
-            ->leftJoin($this->plSuppliers.' as pl', function ($join) {
-                $join->on('pl.xproveedor_id', '=', 'pc.xproveedor_id')
-                    ->on('pl.xempresa_id', '=', 'pc.xempgen_id');
-            })
-            ->leftJoin($this->plArticles.' as art', 'pl.xproveedor_id', '=', 'art.xproveedor_id')
-            ->where('art.xfecha_alta', '>=', '2019-01-01')
-            ->select('pc.xproveedor_id', 'pc.xnombre')
+            ->table($this->suppliers.' as pc')
+            ->select('pc.idProveedor', 'pc.nombre','pc.nif','pc.domicilio','pc.cp','pc.provincia','pc.telefono','pc.fechaAlta','pc.pais')
             ->distinct()
             ->get()
-            ->map(fn($item) => $this->mapSearch($item)->toArray());
+            ->map(fn($item) => $this->mapSearch($item)->toArray())
+            ->toArray();
     }
     public function mapSearch($item): ListSuppliersModel
     {
         return new ListSuppliersModel(
-            $item->xproveedor_id,
-            $item->xnombre
+            $item->idProveedor,
+            $item->nombre,
+            $item->nif,
+            $item->domicilio,
+            $item->cp ?? '',
+            $item->provincia ?? '',
+            $item->telefono ?? '',
+            $item->fechaAlta ?? '',
+            $item->pais
         );
     }
 }
