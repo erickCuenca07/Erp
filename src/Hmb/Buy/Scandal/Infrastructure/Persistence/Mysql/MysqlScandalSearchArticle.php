@@ -14,7 +14,7 @@ class MysqlScandalSearchArticle implements RepositoryScandalSearchArticle
     public function searchArticle($data): mixed
     {
         $idArticle = $data['idArticle'];
-        return DB::connection($this->connection)
+        $a= DB::connection($this->connection)
             ->table($this->article.' as a')
             ->join($this->articleOpc.' as ao', function ($join) {
                 $join->on('a.xarticulo_id', '=', 'ao.xarticulo_id')
@@ -24,11 +24,6 @@ class MysqlScandalSearchArticle implements RepositoryScandalSearchArticle
                 $join->on('ao.xcolor_id', '=', 'c.xcolor_id')
                 ->whereColumn('ao.xempresa_id', '=', 'c.xempresa_id');
             })
-            ->join($this->articlePrice.' as t', function ($join) {
-                $join->on('ao.xtarifa_id', '=', 't.xtarifa_id')
-                ->whereColumn('a.xempresa_id', '=', 't.xempresa_id')
-                ->whereColumn('a.xarticulo_id', '=', 't.xarticulo_id');
-            })
             ->select('a.xdescripcion',DB::raw('CASE
                     when ao.xsizebag is not null then ao.xsizebag
                     else ao.xmedidas
@@ -36,12 +31,38 @@ class MysqlScandalSearchArticle implements RepositoryScandalSearchArticle
                 DB::raw('CASE
                     WHEN ao.xpeso_neto IS NOT NULL AND ao.xpeso_neto != 0.00 THEN ao.xpeso_neto
                     ELSE ao.xpeso_netoa
-                END AS xpeso_neto'),'t.xprecio','ao.xvolumen'
+                END AS xpeso_neto'),'ao.xvolumen'
             )
             ->where('a.xarticulo_id', '=', $idArticle)
             ->get()
             ->map(fn($item) => $this->mapSearchArticle($item))
             ->toArray();
+        $b = DB::connection($this->connection)
+            ->table($this->article.' as a')
+            ->join($this->articlePrice.' as t', function ($join) {
+                $join->on('a.xempresa_id', '=', 't.xempresa_id')
+                    ->whereColumn('a.xarticulo_id', '=', 't.xarticulo_id');
+            })
+            ->select('t.xprecio as priceTariff')
+            ->where('a.xarticulo_id', '=', $idArticle)
+            ->first();
+        $c = DB::connection($this->connection)
+            ->table($this->article.' as a')
+            ->join($this->articlePrice.' as t', function ($join) {
+                $join->on('a.xempresa_id', '=', 't.xempresa_id')
+                    ->whereColumn('a.xarticulo_id', '=', 't.xarticulo_id');
+            })
+            ->select('t.xtarifa_id as tariffArticle','t.xprecio as priceTariff')
+            ->where('a.xarticulo_id', '=', $idArticle)
+            ->get()
+            ->toArray();
+        if ($b) {
+            $a[] = (array) $b;
+        }
+        if ($c) {
+            $a[] = $c;
+        }
+        return $a;
     }
     public function mapSearchArticle($item): array
     {
@@ -55,7 +76,6 @@ class MysqlScandalSearchArticle implements RepositoryScandalSearchArticle
             'preCost' => $item->xp_coste ?? 0,
             'arancel' => $item->xporc_arancel,
             'weightArticle' => $item->xpeso_neto,
-            'priceTariff' => $item->xprecio,
             'cbm' => $item->xvolumen
         ];
     }

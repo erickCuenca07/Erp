@@ -91,7 +91,7 @@
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['productos-ver-hitorial-productos', 'productos-ver-lista-productos','productos-buscar-articulo'])">
+                <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['productos-ver-hitorial-productos', 'productos-ver-lista-productos','productos-buscar-articulo','productos-buscar-articulos-masivo'])">
                     <a @click="toggleProductsMenu()" data-bs-toggle="collapse" href="#navbar-products" class="nav-link " aria-controls="navbar-products" role="button"
                         :class="{'active': $page.component.includes('Products') }">
                         <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
@@ -120,7 +120,15 @@
                             <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'productos-buscar-articulo')"
                                 :class="{'active': $page.component === 'Products/SearchArticle'} ">
                                 <Link class="nav-link" :href="route('products.searchArticle.index')">
-                                    <span class="sidenav-normal">Buscar Artículo</span>
+                                    <span class="sidenav-normal">Busqueda de Stock por Artículo</span>
+                                </Link>
+                            </li>
+                        </ul>
+                        <ul class="nav ms-4">
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'productos-buscar-articulos-masivo')"
+                                :class="{'active': $page.component === 'Products/SearchArticleMassiveModel'} ">
+                                <Link class="nav-link" :href="route('products.searchArticleMassive.index')">
+                                    <span class="sidenav-normal">Buscar Artículo Masivo</span>
                                 </Link>
                             </li>
                         </ul>

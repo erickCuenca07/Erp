@@ -27,6 +27,7 @@
                                         <th class="text-center text-uppercase text-xs">tarifa</th>
                                         <th class="text-center text-uppercase text-xs">gama</th>
                                         <th class="text-center text-uppercase text-xs">proveedor</th>
+                                        <th class="text-center text-uppercase text-xs">Acciones</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -37,8 +38,11 @@
                                         <td class="text-center text-xs">{{ listProduct.measure }}</td>
                                         <td class="text-center text-xs">{{ listProduct.ean }}</td>
                                         <td class="text-center text-xs">{{ listProduct.tarifa }}</td>
-                                        <td class="text-center text-xs">{{ listProduct.gama }}</td>
+                                        <td class="text-center text-xs">{{ listProduct.gama }} | {{listProduct.nameGama}}</td>
                                         <td class="text-center text-xs">{{ listProduct.provider }}</td>
+                                        <td class="text-center text-xs">
+                                           <Link :href="route('products.listProducts.editProducts', listProduct.id)" class="btn btn-primary btn-sm"><i class="fa-solid fa-pen-to-square"></i></Link>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -105,6 +109,12 @@ export default {
         }
     },
     methods: {
+        editArticle(id){
+          const data ={
+              id:id
+          }
+          axios.post(route('products.listProducts.editProducts'), data)
+        },
         totalListProducts() {
             return this.listProducts.length;
         },

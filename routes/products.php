@@ -6,6 +6,8 @@ use Products\ListProducts\Infrastructure\Entrypoint\Http\ListProductsController;
 use Products\ListProducts\Domain\Model\ListProductsModel;
 use Products\SearchArticle\Infrastructure\Entrypoint\Http\ControllerSearchArticle;
 use Products\SearchArticle\Domain\Model\SearchArticleModel;
+use Products\SearchArticleMassive\Domain\Model\SearchArticleMassiveModel;
+use Products\SearchArticleMassive\Infrastructure\Entrypoint\Http\ControllerSearchArticleMassive;
 
 Route::group(
     [
@@ -35,7 +37,7 @@ Route::group(
                     'middleware' => ['can:view,' .ListProductsModel ::class],
                 ], function () {
                     Route::get('/', [ListProductsController::class, 'index'])->name('products.listProducts.index');
-
+                    Route::get('/editProducts/{id}', [ListProductsController::class, 'editProducts'])->name('products.listProducts.editProducts');
                 });
             });
 
@@ -47,6 +49,17 @@ Route::group(
                 ], function () {
                     Route::get('/', [ControllerSearchArticle::class, 'index'])->name('products.searchArticle.index');
                     Route::post('/search', [ControllerSearchArticle::class, 'search'])->name('products.searchArticle.search');
+                });
+            });
+
+            Route::group([
+                'prefix' => 'searchArticleMassive',
+            ], function () {
+                Route::group([
+                    'middleware' => ['can:view,' .SearchArticleMassiveModel ::class],
+                ], function () {
+                    Route::get('/', [ControllerSearchArticleMassive::class, 'index'])->name('products.searchArticleMassive.index');
+                    Route::post('/search', [ControllerSearchArticleMassive::class, 'search'])->name('products.searchArticleMassive.search');
                 });
             });
         });

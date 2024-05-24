@@ -19,7 +19,7 @@
                                         <span class="input-group-text">date</span>
                                         <input type="date" required class="form-control rounded" v-model="dateDay">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" required class="form-control rounded" v-model="dolarCoin">
+                                        <input type="number" required class="form-control rounded" v-model="dolarCoin" @change="changeDolar()">
                                         <span class="input-group-text">Asegurar</span>
                                         <input type="text" required class="form-control rounded" value="si">
                                     </div>
@@ -27,7 +27,7 @@
                                         <span class="input-group-text">Containers</span>
                                        <v-select :options="container" label="idContainer" v-model="containerSelect" class="form-control rounded" placeholder="container" />
                                         <span class="input-group-text">INCOTERMS</span>
-                                        <v-select :options="payment" label="id" v-model="selectPayment" class="form-control rounded" placeholder="payment" required/>
+                                        <v-select :options="payment" label="id" v-model="selectPayment" class="form-control rounded" placeholder="payment" required />
                                         <v-select :options="port" label="id" v-model="selectPort" class="form-control rounded" placeholder="port" required/>
                                     </div>
                                 </div>
@@ -37,7 +37,7 @@
                                             <tbody>
                                             <tr>
                                                 <td> GTS.ADIC</td>
-                                                <td> <input type="number" v-model="this.additionalCosts" required class="form-control rounded" placeholder="GTS.ADIC"></td>
+                                                <td> <input type="number" v-model="this.additionalCosts" required class="form-control rounded" placeholder="GTS.ADIC" @change="this.calculateTotales"></td>
                                             </tr>
                                             <tr>
                                                 <td> IMP.EUR</td>
@@ -45,7 +45,7 @@
                                             </tr>
                                             <tr>
                                                 <td> Flete</td>
-                                                <td v-if="this.selectPort"> {{this.containerSelect.priceContainer}} € </td>
+                                                <td> {{this.flete}} € </td>
                                             </tr>
                                             <tr>
                                                 <td> Arancel</td>
@@ -129,7 +129,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="table-responsive" style="padding-top: 20px">
                                         <table class="tablet table-bordered table-striped table-striped-columns">
                                             <thead>
@@ -147,28 +147,42 @@
                                                 <th rowspan="2" class="text-center text-xs">Importe</th>
                                                 <th rowspan="2" class="text-center text-xs">Arancel</th>
                                                 <th rowspan="2" class="text-center text-xs">Acciones</th>
+                                                <th  class="text-center text-xs">Tarifa</th>
+                                                <th  class="text-center text-xs">Prec.Tarifa</th>
+                                                <th colspan="2" class="text-center text-xs">%M.B</th>
+                                                <th class="text-center">Precio 1</th>
+                                                <th class="text-center">%MB</th>
+                                                <th class="text-center">Precio Tecnico</th>
                                             </tr>
                                             <tr>
                                                 <th class=" text-center text-xs">Medidas</th>
                                                 <th class=" text-center text-xs">Color</th>
                                                 <th class="text-center text-xs">Peso(kg)</th>
+                                                <th></th>
+                                                <th class="text-center text-xs">Cliente</th>
+                                                <th class="text-center text-xs">Comision</th>
+                                                <th class="text-center text-xs">Dto.PP</th>
+                                                <th class="text-center text-xs">Dto.Fra</th>
+                                                <th class="text-center">Precio 2</th>
+                                                <th class="text-center">%MB</th>
+                                                <th class="text-center">Precio Minimo</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr>
                                                 <td rowspan="2" >
-                                                    <input v-model="idArticle" style="width: 130px" class=" rounded" type="text" placeholder="Id del articulo" required @keydown.enter.prevent="searchArticle('main')">
+                                                    <input v-model="idArticle" style="width: 120px" class=" rounded" type="text" placeholder="Id del articulo" required @keydown.enter.prevent="searchArticle('main')">
                                                 </td>
-                                                <td colspan="2" >
+                                                <td colspan="2" style="font-size: 15px" >
                                                     {{this.nameArticle}}
                                                 </td>
                                                 <td rowspan="2">
-                                                   <input v-model="price" style="width: 70px" class="form-control rounded" type="number" placeholder="costo" required @change="changePrice()">
+                                                   <input v-model="price" style="width: 66px" class="form-control rounded" type="text" placeholder="costo" required @change="changePrice()">
                                                 </td>
                                                 <td rowspan="2" class="text-center">
                                                     {{this.brandArticle}}
                                                 </td>
-                                                <td colspan="2" style="width: 70px;">
+                                                <td colspan="2" style="width: 70px;font-size: 13px">
                                                    {{this.priceInventory}} €
                                                 </td>
                                                 <td rowspan="2" class="text-center" >
@@ -181,10 +195,10 @@
                                                     {{this.unitBox}}
                                                 </td>
                                                 <td rowspan="2" class="text-center" >
-                                                    <input v-model="totalBox" style="width: 80px" @change="totalPieces('main')" class="form-control rounded" type="number" placeholder="total cajas" required>
+                                                    <input v-model="totalBox" style="width: 60px" @change="totalPieces('main')" class="form-control rounded" type="text" placeholder="total cajas" required>
                                                 </td>
                                                 <td rowspan="2" class="text-center" >
-                                                    <input v-model="totalPcs"style="width: 80px" @change="totalBoxs('main')" class="form-control rounded" type="number" placeholder="total pcs" required>
+                                                    <input v-model="totalPcs" style="width: 64px" @change="totalBoxs('main')" class="form-control rounded" type="text" placeholder="total pcs" required>
                                                 </td>
                                                 <td rowspan="2" class="text-center" >
                                                     {{this.import}} $
@@ -193,31 +207,56 @@
                                                     {{this.arancel.toFixed(2)}} %
                                                 </td>
                                                 <td rowspan="2" class="text-center">
-                                                    <button @click="duplicateMainRow">Duplicar línea</button>
+                                                    <button style="width: 63px" @click="duplicateMainRow">Duplicar</button>
                                                 </td>
+                                                <td class="text-center">
+                                                    <v-select class="rounded" v-model="this.tariffArticle" :options="this.tarifaSelect" required label="tariffArticle"  placeholder="Seleccione la tarifa">
+                                                    </v-select>
+                                                </td>
+                                                <td class="text-center">{{ this.priceTariff }}</td>
+                                                <td colspan="2" class="text-center">{{ this.margenBruto}} %</td>
+                                                <td class="text-center"> <input v-model="price1" style="width: 105px" class=" rounded" type="number" placeholder="precio 1" @keydown.enter.prevent="calculateMargenBrutoPrice1('main')" required ></td>
+                                                <td class="text-center"><input v-model="margenBruto2" style="width: 105px" class=" rounded" type="number" placeholder="%MB 1" @keydown.enter.prevent="calculatePriceTariffFromMargin2('main')" required> </td>
+                                                <td class="text-center"> {{this.priceTecnico}} </td>
                                             </tr>
                                             <tr>
                                                 <td >
                                                     {{this.measureArticle}}
                                                 </td>
-                                                <td >
+                                                <td style="font-size: 15px">
                                                     {{this.colorArticle}}
                                                 </td>
                                                 <td>
                                                     {{this.weightArticle}}
                                                 </td>
+                                                <td></td>
+                                                <td class="text-center" >
+                                                    <v-select class="rounded" v-model="clientSelect" style="font-size: 10px" :options="clients" required :get-option-label="formatOptionLabel"  placeholder="Seleccione el cliente">
+                                                    </v-select>
+                                                </td>
+                                                <td class="text-center">
+                                                    {{this.commission}} %
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ this.dtoPP }} %
+                                                </td>
+                                                <td class="text-center">
+                                                    {{ this.dtoFra }} %
+                                                </td>
+                                                <td class="text-center"> <input v-model="price2" style="width: 105px" class=" rounded" type="number" placeholder="precio 2" @keydown.enter.prevent="calculateMargenBrutoPrice2('main')" required> </td>
+                                                <td class="text-center"><input v-model="margenBruto3" style="width: 105px" class=" rounded" type="number" placeholder="%MB 2" @keydown.enter.prevent="calculatePriceTariffFromMargin3('main')" required> </td>
+                                                <td class="text-center"> {{this.priceMinimo}} </td>
                                             </tr>
                                             <template v-for="(item,index) in additionalRows">
                                                 <tr>
-
                                                     <td rowspan="2">
-                                                        <input v-model="additionalIds[index]" style="width: 130px" class=" rounded" type="text" placeholder="Id del articulo" required @keydown.enter.prevent="searchArticle(index)">
+                                                        <input v-model="additionalIds[index]" style="width: 120px" class=" rounded" type="text" placeholder="Id del articulo" required @keydown.enter.prevent="searchArticle(index)">
                                                     </td>
                                                     <td colspan="2">
                                                         {{ additionalData[index] ? additionalData[index].nameArticle : '' }}
                                                     </td>
                                                     <td rowspan="2">
-                                                        <input :value="additionalData[index] ? additionalData[index].price : ''" @input="updatePrice(index, $event.target.value)" class="form-control rounded" type="number" placeholder="costo" required @change="resetImport(index)">
+                                                        <input :value="additionalData[index] ? additionalData[index].price : ''" style="width: 66px" @input="updatePrice(index, $event.target.value)" class="form-control rounded" type="text" placeholder="costo" required @change="resetImport(index)">
                                                     </td>
                                                     <td rowspan="2" class="text-center">
                                                         {{additionalData[index] ? additionalData[index].brandArticle : ''}}
@@ -235,10 +274,10 @@
                                                         {{ additionalData[index] ? additionalData[index].unitBox : '' }}
                                                     </td>
                                                     <td rowspan="2" class="text-center">
-                                                        <input :value="additionalData[index] ? additionalData[index].totalBox : ''" @input="additionalData[index].totalBox = $event.target.value" @change="totalPieces(index)" class="form-control rounded" type="number" placeholder="total cajas" required>
+                                                        <input :value="additionalData[index] ? additionalData[index].totalBox : ''" style="width: 60px" @input="additionalData[index].totalBox = $event.target.value" @change="totalPieces(index)" class="form-control rounded" type="text" placeholder="total cajas" required>
                                                     </td>
                                                     <td rowspan="2" class="text-center">
-                                                        <input :value="additionalData[index] ? additionalData[index].totalPcs : ''" @input="additionalData[index].totalPcs = $event.target.value" @change="totalBoxs(index)" class="form-control rounded" type="number" placeholder="total pcs" required>
+                                                        <input :value="additionalData[index] ? additionalData[index].totalPcs : ''" style="width: 60px" @input="additionalData[index].totalPcs = $event.target.value" @change="totalBoxs(index)" class="form-control rounded" type="text" placeholder="total pcs" required>
                                                     </td>
                                                     <td rowspan="2" class="text-center">
                                                         {{ additionalData[index] ? additionalData[index].import.toFixed(2) : '' }} $
@@ -247,8 +286,19 @@
                                                         {{ additionalData[index] ? additionalData[index].arancel.toFixed(2) : '' }} %
                                                     </td>
                                                     <td rowspan="2" class="text-center">
-                                                        <button @click="duplicateRow(index)">Duplicar línea</button>
+                                                        <button style="width: 72px;color: blue" @click="duplicateRow(index)">Duplicar</button>
+                                                        <button  style="width: 72px;color: red" @click="deleteRow(index)">Eliminar línea</button>
                                                     </td>
+                                                    <td class="text-center" v-if="additionalData[index]">
+                                                        <v-select class="rounded" v-model="additionalData[index].tariffArticle" :options="additionalData[index].tarifaSelect" required label="tariffArticle"  placeholder="Seleccione la tarifa"
+                                                        @change="this.calculateTotales">
+                                                        </v-select>
+                                                    </td>
+                                                    <td class="text-center"> {{ additionalData[index] ? additionalData[index].tariffArticle.priceTariff : '' }}</td>
+                                                    <td colspan="2" class="text-center"> {{ additionalData[index] ? additionalData[index].margenBruto : 0 }}</td>
+                                                    <td class="text-center" v-if="additionalData[index]"> <input v-model="additionalData[index].price1" style="width: 105px" class=" rounded" type="number" placeholder="precio 1" @keydown.enter.prevent="calculateMargenBrutoPrice1('index')" required> </td>
+                                                    <td class="text-center" v-if="additionalData[index]"> <input v-model="additionalData[index].margenBruto2" style="width: 105px" class=" rounded" type="number" placeholder="%MB 1" @keydown.enter.prevent="calculatePriceTariffFromMargin2('index')" required></td>
+                                                    <td class="text-center" v-if="additionalData[index]"> {{ additionalData[index] ? additionalData[index].priceTecnico : '' }} </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
@@ -260,6 +310,24 @@
                                                     <td>
                                                         {{ additionalData[index] ? additionalData[index].weightArticle : '' }}
                                                     </td>
+                                                    <td></td>
+                                                    <td class="text-center"  v-if="additionalData[index]">
+                                                        <v-select class="rounded" v-model="additionalData[index].clientSelect2" style="font-size: 10px" :options="clients" required :get-option-label="formatOptionLabel" placeholder="Seleccione el cliente"
+                                                                  @change="updateClientData(index)">
+                                                        </v-select>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{ additionalData[index] ? additionalData[index].clientSelect2.commission : '' }} %
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{ additionalData[index] ? additionalData[index].clientSelect2.dtoPP : '' }} %
+                                                    </td>
+                                                    <td class="text-center">
+                                                        {{additionalData[index] ? additionalData[index].clientSelect2.dtoFra : ''}} %
+                                                    </td>
+                                                    <td class="text-center" v-if="additionalData[index]"> <input v-model="additionalData[index].price2" style="width: 105px" class=" rounded" type="number" placeholder="precio 2" @keydown.enter.prevent="calculateMargenBrutoPrice2('index')" required> </td>
+                                                    <td class="text-center" v-if="additionalData[index]"> <input v-model="additionalData[index].margenBruto3" style="width: 105px" class=" rounded" type="number" placeholder="%MB 2" @keydown.enter.prevent="calculatePriceTariffFromMargin3('index')" required></td>
+                                                    <td class="text-center" v-if="additionalData[index]"> {{ additionalData[index] ? additionalData[index].priceMinimo : '' }} </td>
                                                 </tr>
                                             </template>
                                             <tr>
@@ -273,142 +341,6 @@
                                                 <td  class="text-center">{{ totalImport }} $</td>
                                                 <td ></td> <!-- Celda vacía para mantener el diseño -->
                                             </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="table-responsive" style="padding-top: 20px">
-                                        <table class="tablet table-bordered ">
-                                            <thead>
-                                            <tr>
-                                                <th  class="text-center text-xs">Tarifa</th>
-                                                <th  class="text-center text-xs">Prec.Tarifa</th>
-                                                <th colspan="2" class="text-center text-xs">%M.B</th>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-center text-xs">Cliente</th>
-                                                <th class="text-center text-xs">Comision</th>
-                                                <th class="text-center text-xs">Dto.PP</th>
-                                                <th class="text-center text-xs">Dto.Fra</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td class="text-center">{{this.tariffArticle}}</td>
-                                                <td class="text-center">{{ this.priceTariff }}</td>
-                                                <td colspan="2" class="text-center">{{ this.margenBruto}} %</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center">
-                                                    <v-select class="rounded" v-model="clientSelect" :options="clients" required label="nameGroupCli" placeholder="Seleccione el cliente">
-                                                    </v-select>
-                                                </td>
-                                                <td class="text-center">
-                                                    {{this.commission}} %
-                                                </td>
-                                                <td class="text-center">
-                                                    {{ this.dtoPP }} %
-                                                </td>
-                                                <td class="text-center">
-                                                    {{ this.dtoFra }} %
-                                                </td>
-                                            </tr>
-                                            <template v-for="(item, index) in this.additionalRows">
-                                                <tr v-if="this.additionalData[index]">
-                                                    <td class="text-center"> {{ additionalData[index] ? additionalData[index].tariffArticle : '' }} </td>
-                                                    <td class="text-center"> {{ additionalData[index] ? additionalData[index].priceTariff : '' }}</td>
-                                                    <td colspan="2" class="text-center"> {{ additionalData[index] ? additionalData[index].margenBruto : '' }}</td>
-                                                </tr>
-                                                <tr v-if="additionalData[index]">
-                                                    <td class="text-center">
-                                                        <v-select class="rounded" v-model="additionalData[index].clientSelect2" :options="clients" required label="nameGroupCli" placeholder="Seleccione el cliente">
-                                                        </v-select>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        {{ additionalData[index] ? additionalData[index].clientSelect2.commission : '' }} %
-                                                    </td>
-                                                    <td class="text-center">
-                                                        {{ additionalData[index] ? additionalData[index].clientSelect2.dtoPP : '' }} %
-                                                    </td>
-                                                    <td class="text-center">
-                                                       {{additionalData[index] ? additionalData[index].clientSelect2.dtoFra : ''}} %
-                                                    </td>
-                                                </tr>
-                                            </template>
-                                            <tr></tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="table-responsive" style="padding-top: 20px">
-                                        <table class="tablet table-bordered">
-                                            <thead>
-                                            <tr>
-                                                <th class="text-center">Precio 1</th>
-                                                <th class="text-center">%MB</th>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-center">Precio 2</th>
-                                                <th class="text-center">%MB</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td class="text-center"> <input v-model="price1" style="width: 105px" class=" rounded" type="number" placeholder="precio 1" @keydown.enter.prevent="calculateMargenBrutoPrice1('main')" required ></td>
-                                                <td class="text-center"><input v-model="margenBruto2" style="width: 105px" class=" rounded" type="number" placeholder="%MB 1" @keydown.enter.prevent="calculatePriceTariffFromMargin2('main')" required> </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center"> <input v-model="price2" style="width: 105px" class=" rounded" type="number" placeholder="precio 2" @keydown.enter.prevent="calculateMargenBrutoPrice2('main')" required> </td>
-                                                <td class="text-center"><input v-model="margenBruto3" style="width: 105px" class=" rounded" type="number" placeholder="%MB 2" @keydown.enter.prevent="calculatePriceTariffFromMargin3('main')" required> </td>
-                                            </tr>
-                                            </tbody>
-                                            <template v-for="(item, index) in this.additionalRows">
-                                                <tr v-if="this.additionalData[index]">
-                                                    <td class="text-center"> <input v-model="additionalData[index].price1" style="width: 105px" class=" rounded" type="number" placeholder="precio 1" @keydown.enter.prevent="calculateMargenBrutoPrice1('index')" required> </td>
-                                                    <td class="text-center"> <input v-model="additionalData[index].margenBruto2" style="width: 105px" class=" rounded" type="number" placeholder="%MB 1" @keydown.enter.prevent="calculatePriceTariffFromMargin2('index')" required></td>
-                                                </tr>
-                                                <tr v-if="additionalData[index]">
-                                                    <td class="text-center"> <input v-model="additionalData[index].price2" style="width: 105px" class=" rounded" type="number" placeholder="precio 2" @keydown.enter.prevent="calculateMargenBrutoPrice1('index')" required> </td>
-                                                    <td class="text-center"> <input v-model="additionalData[index].margenBruto3" style="width: 105px" class=" rounded" type="number" placeholder="%MB 2" @keydown.enter.prevent="calculatePriceTariffFromMargin2('index')" required></td>
-                                                </tr>
-                                            </template>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="table-responsive" style="padding-top: 20px">
-                                        <table class="tablet table-bordered">
-                                            <thead>
-                                            <tr>
-                                                <th class="text-center">Precio Tecnico</th>
-                                            </tr>
-                                            <tr>
-                                                <th class="text-center">Precio Minimo</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td class="text-center"> {{this.priceTecnico}} </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-center"> {{this.priceMinimo}} </td>
-                                            </tr>
-                                            <tr>
-                                                <td>&nbsp;</td>
-                                            </tr>
-                                            <template v-for="(item, index) in this.additionalRows">
-                                                <tr v-if="this.additionalData[index]">
-                                                    <td class="text-center"> {{ additionalData[index] ? additionalData[index].priceTecnico : '' }} </td>
-                                                </tr>
-                                                <tr v-if="this.additionalData[index]">
-                                                    <td class="text-center"> {{ additionalData[index] ? additionalData[index].priceMinimo : '' }} </td>
-                                                </tr>
-                                                <tr v-if="this.additionalData[index]">
-                                                    <td>&nbsp;</td>
-                                                </tr>
-                                            </template>
                                             </tbody>
                                         </table>
                                     </div>
@@ -460,7 +392,7 @@ export default {
             selectPayment: '',
             selectPort: '',
             dateDay: new Date().toISOString().substr(0, 10),
-            idArticle: '5024761001',
+            idArticle: '',
             nameArticle: '',
             colorArticle: '',
             measureArticle: '',
@@ -472,16 +404,16 @@ export default {
             totalPcs: 0,
             import: 0,
             totalCbm:0,
-            tariffArticle:'',
-            clientSelect:this.clients.length > 0 ? this.clients[0] : null,
-            commission:this.clients.length > 0 ? this.clients[0].commission : 0,
-            dtoPP:this.clients.length > 0 ? this.clients[0].dtoPP : 0,
-            dtoFra: this.clients.length > 0 ? this.clients[0].dtoFra : 0,
+            clientSelect:'',
+            commission: 0,
+            dtoPP:0,
+            dtoFra: 0,
+            clientSelect2: null,
             arancel:0,
             arancelTotal:0,
             weightArticle:0,
             additionalRows:3,
-            additionalIds: ['5024761001','5024761001','5024761001'],
+            additionalIds: [],
             additionalData: [],
             originalWeight: 0,
             totalImport: 0,
@@ -511,6 +443,9 @@ export default {
             calculatePrice2:0,
             etd:null,
             eta:null,
+            tarifaSelect:[],
+            flete:0,
+            tariffArticle:'',
         }
     },
     watch: {
@@ -519,32 +454,57 @@ export default {
                 this.updatingClient = true;
                 this.commission = newClient.commission;
                 this.dtoPP = newClient.dtoPP;
+                this.dtoFra = newClient.dtoFra;
+                this.calculateTotales();
                 this.updatingClient = false;
             }
         },
-        'additionalData[index].clientSelect2': function(newClient, oldClient) {
-            if (newClient !== oldClient) {
-                this.additionalData[index].commission = newClient.commission;
-                this.additionalData[index].dtoPP = newClient.dtoPP;
-                this.additionalData[index].dtoFra = newClient.dtoFra;
-            }
-        },
         selectPayment(newValue) {
-            let priceContainer = this.containerSelect.priceContainer
-            console.log(priceContainer)
+            let originalPrice = this.containerSelect.priceContainer;
             if (newValue.id === 'CIF') {
-                this.containerSelect.priceContainer = 0;
+                this.flete = 0;
                 this.fob = 1350;
             } else if (newValue.id === 'EXW') {
-                this.containerSelect.priceContainer = 0;
+                this.flete = 0;
                 this.fob = 0;
             }else if (newValue.id === 'FOB') {
-                this.containerSelect.priceContainer = priceContainer;
+                let transform = parseFloat(originalPrice) / parseFloat(this.dolarCoin)
+                this.flete = Math.round(transform)
                 this.fob = 1350;
             }
-        }
+        },
+        tariffArticle(newVal,old) {
+            if (newVal !== old) {
+                const selectedTariff = this.tarifaSelect.find(item => item.tariffArticle === newVal.tariffArticle);
+                if (selectedTariff) {
+                    this.priceTariff = parseFloat(selectedTariff.priceTariff);
+                    this.calculateTotales();
+                } else {
+                    this.priceTariff = null;
+                }
+            }
+        },
     },
     methods: {
+        changeDolar(){
+            let transform = parseFloat(this.containerSelect.priceContainer) / parseFloat(this.dolarCoin)
+            this.flete = Math.round(transform)
+            this.calculateTotales();
+        },
+        updateClientData(index) {
+            console.log('data',index)
+            const selectedClient = this.additionalData[index].clientSelect2;
+            console.log(selectedClient)
+            if (selectedClient) {
+                this.additionalData[index].clientSelect2.commission = selectedClient.commission;
+                this.additionalData[index].clientSelect2.dtoPP = selectedClient.dtoPP;
+                this.additionalData[index].clientSelect2.dtoFra = selectedClient.dtoFra;
+                this.calculateTotales();
+            }
+        },
+        formatOptionLabel(option) {
+            return `${option.nameGroupCli}-${option.marca}`;
+        },
         printPage: async function() {
             const doc = new jsPDF('l', 'pt', 'a4');
             const data = [
@@ -572,7 +532,7 @@ export default {
             const otherData = [
                 ['GTS.ADIC', this.additionalCosts],
                 ['IMP.EUR', this.impEur],
-                ['Flete', this.selectPort ? this.containerSelect.priceContainer + ' €' : ''],
+                ['Flete', this.flete + ' €' ],
                 ['Arancel', this.arancelTotal],
                 ['Seguro', this.sure],
                 ['fob', this.fob],
@@ -642,12 +602,12 @@ export default {
             })
             //tabla 3: articulos
              const rows = this.additionalData.map(item =>[item.idArticle, item.nameArticle, item.measureArticle, item.colorArticle, item.price, item.brandArticle, item.priceInventory, item.weightArticle,
-                parseFloat(item.cbm).toFixed(2), parseFloat(item.totalCbm).toFixed(2), item.unitBox, item.totalBox, item.totalPcs, parseFloat(item.import).toFixed(2), item.arancel,item.tariffArticle,item.priceTariff,item.margenBruto,item.clientSelect2.nameGroupCli,item.clientSelect2.commission,item.clientSelect2.dtoPP,item.clientSelect2.dtoFra,item.price1,item.margenBruto2,item.price2,item.margenBruto3,item.priceTecnico,item.priceMinimo
+                parseFloat(item.cbm).toFixed(2), parseFloat(item.totalCbm).toFixed(2), item.unitBox, item.totalBox, item.totalPcs, parseFloat(item.import).toFixed(2), item.arancel,item.tariffArticle.tariffArticle,item.priceTariff,item.margenBruto,item.clientSelect2.nameGroupCli,item.clientSelect2.commission,item.clientSelect2.dtoPP,item.clientSelect2.dtoFra,item.price1,item.margenBruto2,item.price2,item.margenBruto3,item.priceTecnico,item.priceMinimo
             ]);
              let fixedImport = parseFloat(this.import).toFixed(2);
              let fixedCbm = parseFloat(this.totalCbm).toFixed(2);
              rows.unshift([this.idArticle, this.nameArticle, this.measureArticle, this.colorArticle, this.price, this.brandArticle, this.priceInventory, this.weightArticle, parseFloat(this.cbm).toFixed(2), fixedCbm,
-                 this.unitBox, this.totalBox, this.totalPcs, fixedImport, this.arancel,this.tariffArticle,this.priceTariff,this.margenBruto,this.clientSelect.nameGroupCli,this.commission,this.dtoPP,this.dtoFra,this.price1,this.margenBruto2,this.price2,this.margenBruto3,this.priceTecnico,this.priceMinimo
+                 this.unitBox, this.totalBox, this.totalPcs, fixedImport, this.arancel,this.tariffArticle.tariffArticle,this.priceTariff,this.margenBruto,this.clientSelect.nameGroupCli,this.commission,this.dtoPP,this.dtoFra,this.price1,this.margenBruto2,this.price2,this.margenBruto3,this.priceTecnico,this.priceMinimo
              ]);
             doc.autoTable({
                 startY: 200,
@@ -713,7 +673,7 @@ export default {
                     return
                 }
                 toast.success('Articulo encontrado');
-                if(idInput === 'main'){
+                if(idInput === 'main') {
                     this.nameArticle = response.data[0].nameArticle
                     this.colorArticle = response.data[0].colorArticle
                     this.measureArticle = response.data[0].measureArticle
@@ -721,20 +681,46 @@ export default {
                     this.unitBox = response.data[0].unitBox
                     this.totalPcs = this.unitBox
                     this.totalBox = 1
-                    this.tariffArticle = response.data[0].tariffArticle
                     this.price = parseFloat(response.data[0].preCost)
-                    this.import = this.totalPcs * this.price
+                    this.import = parseFloat(this.totalPcs * this.price).toFixed(2)
                     this.arancel = parseFloat(response.data[0].arancel)
                     this.weightArticle = parseFloat(response.data[0].weightArticle)
                     this.originalWeight = parseFloat(response.data[0].weightArticle)
-                    this.priceTariff = parseFloat(response.data[0].priceTariff)
-                    this.totalImport = this.import
+                    //this.priceTariff = parseFloat(response.data[1].priceTariff)
+                    this.totalImport = parseFloat(this.import).toFixed(2)
                     this.calculateBoxTotal = this.totalBox
                     this.calculatePcsTotal = this.totalPcs
                     this.calculateWeightTotal = this.weightArticle
                     this.cbm = parseFloat(response.data[0].cbm)
                     this.totalCbm = this.cbm
                     this.calculateCbmTotal = this.cbm
+                    this.tarifaSelect = response.data[2]
+                    if (this.brandArticle === 'LEO') {
+                        const tariffObj = this.tarifaSelect.find(item => item.tariffArticle === 'LG');
+                        const client = this.clients.find(item => item.nameGroupCli === 'General' && item.marca === this.brandArticle);
+                        this.clientSelect = client
+                        if (tariffObj) {
+                            this.tariffArticle = tariffObj;
+                            this.priceTariff = parseFloat(tariffObj.priceTariff)
+                        } else {
+                            this.tariffArticle = this.tarifaSelect[0]
+                            this.priceTariff = parseFloat(this.tariffArticle.priceTariff)
+                        }
+                    }else if (this.brandArticle === 'ICE') {
+                        const tariffObj = this.tarifaSelect.find(item => item.tariffArticle === 'HG');
+                        const client = this.clients.find(item => item.nameGroupCli === 'General' && item.marca === this.brandArticle);
+                        this.clientSelect = client
+                        if (tariffObj) {
+                            this.tariffArticle = tariffObj;
+                            this.priceTariff = parseFloat(tariffObj.priceTariff)
+                        } else {
+                            this.tariffArticle = this.tarifaSelect[0]
+                            this.priceTariff = parseFloat(this.tariffArticle.priceTariff)
+                        }
+                    } else{
+                        this.tariffArticle = this.tarifaSelect[0]
+                        this.priceTariff = parseFloat(this.tariffArticle.priceTariff)
+                    }
                 }else{
                     this.additionalData[idInput] = {
                         idArticle: this.additionalIds[idInput],
@@ -743,7 +729,6 @@ export default {
                         measureArticle: response.data[0].measureArticle,
                         brandArticle: response.data[0].brandArticle,
                         unitBox: response.data[0].unitBox,
-                        tariffArticle: response.data[0].tariffArticle,
                         price: parseFloat(response.data[0].preCost),
                         arancel: parseFloat(response.data[0].arancel),
                         weightArticle: parseFloat(response.data[0].weightArticle),
@@ -751,10 +736,14 @@ export default {
                         totalBox:1,
                         totalPcs:response.data[0].unitBox,
                         import: response.data[0].unitBox * parseFloat(response.data[0].preCost),
-                        priceTariff: parseFloat(response.data[0].priceTariff),
+                        priceTariff: 0,
                         cbm: parseFloat(response.data[0].cbm),
                         totalCbm : parseFloat(response.data[0].cbm),
-                        clientSelect2:this.clients.length > 0 ? this.clients[0] : null,
+                        clientSelect2:[],
+                        tarifaSelect:response.data[2],
+                        tariffArticle: 0,
+                        dtoFra:0,
+                        margenBruto:0,
                     };
                     if (this.totalImport === 0) {
                         this.totalImport = this.additionalData[idInput].import
@@ -772,6 +761,39 @@ export default {
                     }else{
                         const totalPcs = parseFloat(this.additionalData[idInput].totalPcs).toFixed(2);
                         this.calculatePcsTotal = (parseFloat(this.calculatePcsTotal) + parseFloat(totalPcs)).toFixed(2);
+                    }
+                    if (this.additionalData[idInput].brandArticle === 'LEO') {
+                        const tariffObj = this.additionalData[idInput].tarifaSelect.find(item => item.tariffArticle === 'LG');
+                        const client = this.clients.find(item => item.nameGroupCli === 'General' && item.marca === this.additionalData[idInput].brandArticle);
+                        this.additionalData[idInput].clientSelect2 = client
+                        this.additionalData[idInput].clientSelect2.dtoPP = (client.dtoPP)
+                        this.additionalData[idInput].clientSelect2.dtoFra = parseFloat(client.dtoFra)
+                        console.log('clientSelect2',this.additionalData[idInput].clientSelect2.dtoPP)
+                        if (tariffObj) {
+                            this.additionalData[idInput].tariffArticle = tariffObj;
+                            this.additionalData[idInput].priceTariff = parseFloat(tariffObj.priceTariff).toFixed(2)
+                        } else {
+                            this.additionalData[idInput].tariffArticle = this.additionalData[idInput].tarifaSelect[0]
+                            this.additionalData[idInput].priceTariff = parseFloat(this.additionalData[idInput].tariffArticle.priceTariff).toFixed(2)
+                        }
+                        this.calculateTotales();
+                    }else if (this.additionalData[idInput].brandArticle === 'ICE') {
+                        const tariffObj = this.additionalData[idInput].tarifaSelect.find(item => item.tariffArticle === 'HG');
+                        const client = this.clients.find(item => item.nameGroupCli === 'General' && item.marca === this.additionalData[idInput].brandArticle);
+                        this.additionalData[idInput].clientSelect2 = client
+                        this.additionalData[idInput].clientSelect2.dtoPP = parseFloat(client.dtoPP)
+                        this.additionalData[idInput].clientSelect2.dtoFra = parseFloat(client.dtoFra)
+                        if (tariffObj) {
+                            this.additionalData[idInput].tariffArticle = tariffObj;
+                            this.additionalData[idInput].priceTariff = parseFloat(tariffObj.priceTariff).toFixed(2)
+                        } else {
+                            this.additionalData[idInput].tariffArticle = this.additionalData[idInput].tarifaSelect[0];
+                            this.additionalData[idInput].priceTariff = parseFloat(this.additionalData[idInput].tariffArticle.priceTariff).toFixed(2)
+                        }
+                        this.calculateTotales()
+                    } else {
+                        this.additionalData[idInput].tariffArticle = this.additionalData[idInput].tarifaSelect[0];
+                        this.additionalData[idInput].priceTariff = parseFloat(this.additionalData[idInput].tariffArticle.priceTariff).toFixed(2)
                     }
                 }
             }).catch(error => {
@@ -868,6 +890,7 @@ export default {
                 let calculateArancel = (item.import * item.arancel) / 100
                 this.arancelTotal += calculateArancel
                 this.calculateWeightTotal = parseFloat(this.calculateWeightTotal) + parseFloat(item.weightArticle);
+                item.priceTariff = item.tariffArticle.priceTariff
             }
             this.calculateWeightTotal = parseFloat(this.calculateWeightTotal).toFixed(2)
             this.arancelTotal = (this.arancelTotal / this.dolarCoin).toFixed(2);
@@ -879,27 +902,53 @@ export default {
             let sure12 = sure * 0.0012
             let sureTotal = sure12 * this.dolarCoin
             this.sure = sureTotal.toFixed(2)
-            let a = (this.import / this.dolarCoin) + ((((this.arancel) * this.import) / this.dolarCoin) / 100) + ((parseFloat(this.sure) + parseFloat(this.containerSelect.priceContainer) + this.fob) * parseFloat(this.totalCbm).toFixed(2)) / this.calculateCbmTotal
+            let a = (this.import / this.dolarCoin) + ((((this.arancel) * this.import) / this.dolarCoin) / 100) + ((parseFloat(this.sure) + parseFloat(this.flete) + this.fob + parseFloat(this.additionalCosts)) * parseFloat(this.totalCbm).toFixed(2)) / this.calculateCbmTotal
             a = a/ this.totalPcs;
             this.priceInventory = a.toFixed(4)
             for (const item of this.additionalData){
-                let a = (parseFloat(item.import) / this.dolarCoin) + ((((item.arancel) * parseFloat(item.import)) / this.dolarCoin) / 100) + ((parseFloat(this.sure) + parseFloat(this.containerSelect.priceContainer) + this.fob) * parseFloat(item.totalCbm).toFixed(2)) / this.calculateCbmTotal
+                let a = (parseFloat(item.import) / this.dolarCoin) + ((((item.arancel) * parseFloat(item.import)) / this.dolarCoin) / 100) + ((parseFloat(this.sure) + parseFloat(this.flete) + this.fob + parseFloat(this.additionalCosts)) * parseFloat(item.totalCbm).toFixed(2)) / this.calculateCbmTotal
                 a = a/ item.totalPcs;
                 item.priceInventory = a.toFixed(4)
             }
             this.impEur=(this.totalImport / this.dolarCoin).toFixed(2)
             this.calculateMargenBruto();
             this.calculateMargenAdditional();
-            this.allTotales = (parseFloat(this.impEur) + parseFloat(this.containerSelect.priceContainer) + parseFloat(this.arancelTotal) + parseFloat(this.sure) + parseFloat(this.fob)).toFixed(2)
+            this.allTotales = (parseFloat(this.impEur) + parseFloat(this.flete) + parseFloat(this.arancelTotal) + parseFloat(this.sure) + parseFloat(this.fob) + parseFloat(this.additionalCosts)).toFixed(2)
             let calculate = (this.totalImport *  (this.margenBruto / 100)) / this.totalImport;
             this.calculateRate = (calculate * 100).toFixed(2)
         },
         duplicateRow(index){
-            const originalData = this.additionalData[index];
-            const newData = { ...originalData };
+            const newData = {
+                idArticle: '',
+                nameArticle: '',
+                colorArticle: '',
+                measureArticle: '',
+                brandArticle: '',
+                unitBox: '',
+                tariffArticle: '',
+                price: 0,
+                arancel: 0,
+                weightArticle: 0,
+                originalWeight: 0,
+                totalBox:0,
+                totalPcs:'',
+                import: 0,
+                totalCbm:0,
+                priceTariff: 0,
+                clientSelect2:'',
+                cbm:0
+            };
             this.additionalData.push(newData);
             this.additionalRows++;
-            this.calculateTotales();
+        },
+        deleteRow(index) {
+            if (index >= 0 && index < this.additionalData.length) {
+                this.additionalData.splice(index, 1);
+                this.additionalRows--;
+                this.calculateTotales();
+            } else {
+                toast.error('No se puede eliminar esta linea',{autoClose:false})
+            }
         },
         duplicateMainRow(){
             const newData = {
@@ -919,21 +968,17 @@ export default {
                 import: this.unitBox * parseFloat(this.price),
                 totalCbm:0,
                 priceTariff: parseFloat(this.priceTariff),
+                clientSelect2:'',
+                cbm:this.cbm
             };
-            const measures = this.measureArticle.match(/\d+/g);
-            if (measures.length === 3){
-                const measuresMeters = measures.map(measure => measure / 100);
-                const volume = measuresMeters[0] * measuresMeters[1] * measuresMeters[2];
-                newData.cbm = volume;
-                newData.totalCbm = newData.totalBox * newData.cbm
-            }else {
-                toast.info('No tenemos la medida de la caja, no podemos calcular el CBM',{autoClose:false});
-            }
             this.additionalData.push(newData);
             this.additionalRows++;
-            this.calculateTotales();
         },
         calculateMargenBruto(){
+            console.log('dtoPP',this.dtoPP)
+            console.log('dtoFra',this.dtoFra)
+            console.log('priceTariff',this.priceTariff)
+            console.log('priceInventory',this.priceInventory)
             let priceSale = this.priceTariff - (this.priceTariff * (this.dtoPP / 100)) - (this.priceTariff * (this.dtoFra / 100))
             let margenBrutoPercent = ((parseFloat(priceSale) - this.priceInventory) / parseFloat(priceSale)) * 100;
             let rest = 1- this.cv;
@@ -944,7 +989,7 @@ export default {
         },
         calculateMargenAdditional(){
             for (const item of this.additionalData){
-                let priceSale = item.priceTariff - (item.priceTariff * (item.clientSelect2.dtoPP / 100)) - (item.priceTariff * (item.clientSelect2.dtoFra / 100))
+                let priceSale = parseFloat(item.priceTariff) - (parseFloat(item.priceTariff) * (parseFloat(item.clientSelect2.dtoPP) / 100)) - (parseFloat(item.priceTariff) * (parseFloat(item.clientSelect2.dtoFra) / 100))
                 let margenBrutoPercent = ((parseFloat(priceSale) - item.priceInventory) / parseFloat(priceSale)) * 100;
                 let rest = 1- this.cv;
                 item.priceMinimo = (item.priceInventory / rest).toFixed(2);
@@ -962,7 +1007,7 @@ export default {
                 this.calculatePrice1 = (calculate * 100).toFixed(2)
             }else{
                 for (const item of this.additionalData){
-                    let priceSale = item.price1 - ((item.clientSelect2.dtoPP / 100) * item.priceTariff) - ((item.clientSelect2.dtoFra / 100) * item.price1)
+                    let priceSale = parseFloat(item.price1) - ((parseFloat(item.clientSelect2.dtoPP) / 100) * parseFloat(item.priceTariff)) - ((parseFloat(item.clientSelect2.dtoFra) / 100) * parseFloat(item.price1))
                     let margenBrutoPercent = ((parseFloat(priceSale).toFixed(2) - item.priceInventory) / parseFloat(priceSale).toFixed(2)) * 100;
                     item.margenBruto2 = margenBrutoPercent.toFixed(2);
                     let calculate = (this.totalImport *  (item.margenBruto2 / 100)) / this.totalImport;
@@ -998,7 +1043,7 @@ export default {
                     let rest = 1 - (item.margenBruto2 / 100)
                     let priceSale = parseFloat(item.priceInventory) / rest;
                     let priceTariff = priceSale / (1 - (parseFloat(item.clientSelect2.dtoPP) / 100) - (parseFloat(item.clientSelect2.dtoFra) / 100));
-                    item.price1 = priceTariff.toFixed(2);
+                    item.price2 = priceTariff.toFixed(2);
                 }
             }
         },
