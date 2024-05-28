@@ -40,7 +40,7 @@ class MysqlSearchArticleMassive implements RepositorySearchArticleMassive
             })
             ->whereIn('art.xarticulo_id',  $data)
             ->select('art.xarticulo_id','art.xdescripcion','art.xproveedor_id','art.xfamilia_id','c.xcolor','artO.xgama','g.xgama as nameGama','artO.xmarca_id','artO.xmedidas','artO.xtarifa_id','artO.xupc','artO.xpeso_bruto','artO.xpeso_neto','artO.xvolumen','artO.xpremedcoste','artO.xpreminimo','artO.xpretarifa','artO.xpretecnico','artO.xuni_caja','artO.xrelleno',
-                'artO.xmarca_id','artO.xsizebag','artO.xuni_inner','artO.xporc_arancel','pc.xnombre','pf.xdescripcion')
+                'artO.xmarca_id','artO.xsizebag','artO.xuni_inner','artO.xporc_arancel','pc.xnombre','pf.xdescripcion','artO.xact_tarifa','artO.xbajadef')
             ->get()
             ->map(fn($item) => $this->mapListProducts($item))
             ->toArray();
@@ -72,7 +72,9 @@ class MysqlSearchArticleMassive implements RepositorySearchArticleMassive
             'marcaId' => $item->xmarca_id,
             'sizeBag' => $item->xsizebag,
             'inner' => $item->xuni_inner,
-            'arancel' => (float)$item->xporc_arancel
+            'arancel' => (float)$item->xporc_arancel,
+            'activeTarifa' => $item->xact_tarifa,
+            'baja' => $item->xbajadef
         ];
     }
 }
