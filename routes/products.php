@@ -8,6 +8,8 @@ use Products\SearchArticle\Infrastructure\Entrypoint\Http\ControllerSearchArticl
 use Products\SearchArticle\Domain\Model\SearchArticleModel;
 use Products\SearchArticleMassive\Domain\Model\SearchArticleMassiveModel;
 use Products\SearchArticleMassive\Infrastructure\Entrypoint\Http\ControllerSearchArticleMassive;
+use Products\UpdateArticleMassive\Domain\Model\ModelUpdateArticleMassive;
+use Products\UpdateArticleMassive\Infrastructure\Entrypoint\Http\ControllerUpdateArticleMassive;
 
 Route::group(
     [
@@ -59,6 +61,17 @@ Route::group(
                     'middleware' => ['can:view,' .SearchArticleMassiveModel ::class],
                 ], function () {
                     Route::get('/', [ControllerSearchArticleMassive::class, 'index'])->name('products.searchArticleMassive.index');
+                    Route::post('/search', [ControllerSearchArticleMassive::class, 'search'])->name('products.searchArticleMassive.search');
+                });
+            });
+
+            Route::group([
+                'prefix' => 'updateProductsMassive',
+            ], function () {
+                Route::group([
+                    'middleware' => ['can:view,' .ModelUpdateArticleMassive ::class],
+                ], function () {
+                    Route::get('/', [ControllerUpdateArticleMassive::class, 'index'])->name('products.updateArticleMassive.index');
                     Route::post('/search', [ControllerSearchArticleMassive::class, 'search'])->name('products.searchArticleMassive.search');
                 });
             });

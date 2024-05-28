@@ -132,6 +132,14 @@
                                 </Link>
                             </li>
                         </ul>
+                        <ul class="nav ms-4">
+                            <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, 'productos-actualizar-articulos-masivo')"
+                                :class="{'active': $page.component === 'Products/UpdateArticleMassive'} ">
+                                <Link class="nav-link" :href="route('products.updateArticleMassive.index')">
+                                    <span class="sidenav-normal">Actualizar Artículo Masivo</span>
+                                </Link>
+                            </li>
+                        </ul>
                     </div>
                 </li>
                 <li class="nav-item" v-if="this.$permissions(this.$page.props.auth.user, ['familias-ver-lista-familias'])">

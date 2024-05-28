@@ -32,6 +32,8 @@ use Buy\Scandal\Domain\Model\ScandalModel;
 use Buy\Scandal\Infrastructure\Entrypoint\Http\Policies\ScandalPolices;
 use Products\SearchArticleMassive\Domain\Model\SearchArticleMassiveModel;
 use Products\SearchArticleMassive\Infrastructure\Entrypoint\Http\Policies\SearchArticleMassivePolices;
+use Products\UpdateArticleMassive\Infrastructure\Entrypoint\Http\Policies\PoliciesUpdateArticleMassive;
+use Products\UpdateArticleMassive\Domain\Model\ModelUpdateArticleMassive;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -49,7 +51,8 @@ class AuthServiceProvider extends ServiceProvider
         CreateArticleModel::class => CreateArticlePolicies::class,
         ModelTransportInvoices::class => TransportInvoicesPolicies::class,
         ScandalModel::class => ScandalPolices::class,
-        SearchArticleMassiveModel::class => SearchArticleMassivePolices::class
+        SearchArticleMassiveModel::class => SearchArticleMassivePolices::class,
+        ModelUpdateArticleMassive::class => PoliciesUpdateArticleMassive::class
     ];
 
     /**
